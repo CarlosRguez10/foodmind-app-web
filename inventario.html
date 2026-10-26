@@ -8,54 +8,38 @@
 </head>
 <body>
 
-  <h1>📦 Inventario</h1>
+<h1>📦 Inventario</h1>
 
-  <div class="card">
-    <h3>Añadir alimento</h3>
+<div class="card">
+  <h3>Añadir alimento</h3>
 
-    <input
-      id="nombre"
-      type="text"
-      placeholder="Nombre del alimento"
-    >
+  <input id="nombre" type="text" placeholder="Nombre del alimento">
 
-    <br><br>
+  <br><br>
 
-    <input
-      id="cantidad"
-      type="number"
-      min="1"
-      placeholder="Cantidad"
-    >
+  <input id="cantidad" type="number" min="1" placeholder="Cantidad">
 
-    <br><br>
+  <br><br>
 
-    <button onclick="agregarAlimento()">
-      Añadir
-    </button>
-  </div>
+  <input id="caducidad" type="date">
 
-  <div id="lista-alimentos"></div>
+  <br><br>
 
-  <div class="bottom-nav">
-    <div>
-      <a href="index.html">🏠 Inicio</a>
-    </div>
+  <button onclick="agregarAlimento()">
+    Añadir
+  </button>
+</div>
 
-    <div>
-      <a href="inventario.html">📦 Inventario</a>
-    </div>
+<div id="lista-alimentos"></div>
 
-    <div>
-      🛒 Compra
-    </div>
+<div class="bottom-nav">
+  <div><a href="index.html">🏠 Inicio</a></div>
+  <div><a href="inventario.html">📦 Inventario</a></div>
+  <div>🛒 Compra</div>
+  <div>⚙️ Ajustes</div>
+</div>
 
-    <div>
-      ⚙️ Ajustes
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
