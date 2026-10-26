@@ -22,11 +22,12 @@ function mostrarAlimentos() {
     tarjeta.className = "card";
 
     tarjeta.innerHTML = `
-      <h3>${alimento.nombre}</h3>
-      <p>Cantidad: ${alimento.cantidad}</p>
-      <button onclick="eliminarAlimento(${indice})">
-        Eliminar
-      </button>
+    <h3>${alimento.nombre}</h3>
+    <p>Cantidad: ${alimento.cantidad}</p>
+
+    <button onclick="eliminarAlimento(${indice})">
+    🗑️ Eliminar
+    </button>
     `;
 
     lista.appendChild(tarjeta);
