@@ -1,11 +1,16 @@
 console.log("FoodMind iniciado");
 function agregarAlimento() {
 
-  const nombre = document.getElementById("nombre").value;
-  const cantidad = document.getElementById("cantidad").value;
+  const nombre = document.getElementById("nombre").value.trim();
+  const cantidad = Number(document.getElementById("cantidad").value);
 
-  if (!nombre || !cantidad) {
-    alert("Completa todos los campos");
+  if (!nombre) {
+    alert("Introduce un nombre");
+    return;
+  }
+
+  if (cantidad <= 0) {
+    alert("La cantidad debe ser mayor que 0");
     return;
   }
 
