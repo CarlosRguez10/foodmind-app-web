@@ -47,3 +47,15 @@ h1 {
   font-weight: bold;
   color: #22C55E;
 }
+button {
+  background: #22C55E;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #15803D;
+}
