@@ -4,6 +4,11 @@ function agregarAlimento() {
   const nombre = document.getElementById("nombre").value;
   const cantidad = document.getElementById("cantidad").value;
 
+  if (!nombre || !cantidad) {
+    alert("Completa todos los campos");
+    return;
+  }
+
   const tarjeta = document.createElement("div");
 
   tarjeta.className = "card";
@@ -17,4 +22,6 @@ function agregarAlimento() {
     .getElementById("lista-alimentos")
     .appendChild(tarjeta);
 
+  document.getElementById("nombre").value = "";
+  document.getElementById("cantidad").value = "";
 }
