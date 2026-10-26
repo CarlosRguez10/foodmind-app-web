@@ -1,21 +1,13 @@
-let alimentos =
-  JSON.parse(localStorage.getItem("alimentos")) || [];
+let alimentos = JSON.parse(localStorage.getItem("alimentos")) || [];
 
 function guardarAlimentos() {
-  localStorage.setItem(
-    "alimentos",
-    JSON.stringify(alimentos)
-  );
+  localStorage.setItem("alimentos", JSON.stringify(alimentos));
 }
 
 function diasHastaCaducidad(fecha) {
-
   const hoy = new Date();
-
   const vencimiento = new Date(fecha);
-
-  const diferencia =
-    vencimiento - hoy;
+  const diferencia = vencimiento - hoy;
 
   return Math.ceil(
     diferencia / (1000 * 60 * 60 * 24)
@@ -23,22 +15,15 @@ function diasHastaCaducidad(fecha) {
 }
 
 function colorCaducidad(dias) {
-
-  if (dias <= 3) {
-    return "#EF4444";
-  }
-
-  if (dias <= 7) {
-    return "#FACC15";
-  }
+  if (dias <= 3) return "#EF4444";
+  if (dias <= 7) return "#FACC15";
 
   return "#22C55E";
 }
 
 function mostrarAlimentos() {
 
-  const lista =
-    document.getElementById("lista-alimentos");
+  const lista = document.getElementById("lista-alimentos");
 
   if (!lista) return;
 
@@ -47,35 +32,23 @@ function mostrarAlimentos() {
   alimentos.forEach((alimento, indice) => {
 
     const dias =
-      diasHastaCaducidad(
-        alimento.caducidad
-      );
+      diasHastaCaducidad(alimento.caducidad);
 
-    const tarjeta =
-      document.createElement("div");
+    const tarjeta = document.createElement("div");
 
     tarjeta.className = "card";
 
     tarjeta.innerHTML = `
       <h3>${alimento.nombre}</h3>
+      <p>Cantidad: ${alimento.cantidad}</p>
+      <p>Caduca: ${alimento.caducidad}</p>
 
-      <p>Cantidad:
-      ${alimento.cantidad}</p>
-
-      <p>
-      Caduca:
-      ${alimento.caducidad}
+      <p style="color:${colorCaducidad(dias)};font-weight:bold;">
+        ${dias} días
       </p>
 
-      <p style="
-      color:${colorCaducidad(dias)};
-      font-weight:bold;">
-      ${dias} días
-      </p>
-
-      <button
-      onclick="eliminarAlimento(${indice})">
-      🗑️ Eliminar
+      <button onclick="eliminarAlimento(${indice})">
+        🗑️ Eliminar
       </button>
     `;
 
@@ -89,19 +62,13 @@ function mostrarAlimentos() {
 function agregarAlimento() {
 
   const nombre =
-    document.getElementById("nombre")
-    .value
-    .trim();
+    document.getElementById("nombre").value.trim();
 
   const cantidad =
-    Number(
-      document.getElementById("cantidad")
-      .value
-    );
+    Number(document.getElementById("cantidad").value);
 
   const caducidad =
-    document.getElementById("caducidad")
-    .value;
+    document.getElementById("caducidad").value;
 
   if (!nombre) {
     alert("Introduce un nombre");
@@ -125,7 +92,6 @@ function agregarAlimento() {
   });
 
   guardarAlimentos();
-
   mostrarAlimentos();
 
   document.getElementById("nombre").value = "";
@@ -144,16 +110,14 @@ function eliminarAlimento(indice) {
 
 function actualizarDashboard() {
 
-  let total = alimentos.length;
+  const total = alimentos.length;
 
   let proximos = 0;
 
   alimentos.forEach(alimento => {
 
     const dias =
-      diasHastaCaducidad(
-        alimento.caducidad
-      );
+      diasHastaCaducidad(alimento.caducidad);
 
     if (dias <= 7) {
       proximos++;
@@ -162,22 +126,17 @@ function actualizarDashboard() {
   });
 
   const totalElement =
-    document.getElementById(
-      "total-productos"
-    );
+    document.getElementById("total-productos");
 
   const proximosElement =
-    document.getElementById(
-      "productos-caducar"
-    );
+    document.getElementById("productos-caducar");
 
   if (totalElement) {
     totalElement.textContent = total;
   }
 
   if (proximosElement) {
-    proximosElement.textContent =
-      proximos;
+    proximosElement.textContent = proximos;
   }
 }
 
