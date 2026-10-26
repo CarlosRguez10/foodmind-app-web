@@ -1,8 +1,50 @@
-console.log("FoodMind iniciado");
+let alimentos = JSON.parse(localStorage.getItem("alimentos")) || [];
+
+function guardarAlimentos() {
+  localStorage.setItem(
+    "alimentos",
+    JSON.stringify(alimentos)
+  );
+}
+
+function mostrarAlimentos() {
+
+  const lista = document.getElementById("lista-alimentos");
+
+  if (!lista) return;
+
+  lista.innerHTML = "";
+
+  alimentos.forEach((alimento, indice) => {
+
+    const tarjeta = document.createElement("div");
+
+    tarjeta.className = "card";
+
+    tarjeta.innerHTML = `
+      <h3>${alimento.nombre}</h3>
+      <p>Cantidad: ${alimento.cantidad}</p>
+      <button onclick="eliminarAlimento(${indice})">
+        Eliminar
+      </button>
+    `;
+
+    lista.appendChild(tarjeta);
+  });
+
+  actualizarDashboard();
+}
+
 function agregarAlimento() {
 
-  const nombre = document.getElementById("nombre").value.trim();
-  const cantidad = Number(document.getElementById("cantidad").value);
+  const nombre = document
+    .getElementById("nombre")
+    .value
+    .trim();
+
+  const cantidad = Number(
+    document.getElementById("cantidad").value
+  );
 
   if (!nombre) {
     alert("Introduce un nombre");
@@ -14,19 +56,38 @@ function agregarAlimento() {
     return;
   }
 
-  const tarjeta = document.createElement("div");
+  alimentos.push({
+    nombre,
+    cantidad
+  });
 
-  tarjeta.className = "card";
+  guardarAlimentos();
 
-  tarjeta.innerHTML = `
-    <h3>${nombre}</h3>
-    <p>Cantidad: ${cantidad}</p>
-  `;
-
-  document
-    .getElementById("lista-alimentos")
-    .appendChild(tarjeta);
+  mostrarAlimentos();
 
   document.getElementById("nombre").value = "";
   document.getElementById("cantidad").value = "";
 }
+
+function eliminarAlimento(indice) {
+
+  alimentos.splice(indice, 1);
+
+  guardarAlimentos();
+
+  mostrarAlimentos();
+}
+
+function actualizarDashboard() {
+
+  const total = document.getElementById("total-productos");
+
+  if (total) {
+    total.textContent = alimentos.length;
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  mostrarAlimentos
+);
