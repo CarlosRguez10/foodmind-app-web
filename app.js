@@ -41,8 +41,8 @@ function mostrarAlimentos() {
     tarjeta.innerHTML = `
       <h3>${alimento.nombre}</h3>
       <p>Cantidad: ${alimento.cantidad}</p>
-      <p>Caduca: ${alimento.caducidad}</p>
-
+      <p>Caduca: ${new Date(alimento.caducidad)
+        .toLocaleDateString("es-ES")}</p>
       <p style="color:${colorCaducidad(dias)};font-weight:bold;">
         ${dias} días
       </p>
