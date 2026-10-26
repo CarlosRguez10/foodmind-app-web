@@ -1,4 +1,10 @@
 console.log("FoodMind iniciado");
 function agregarAlimento() {
-  alert("Próximamente podrás añadir alimentos");
+  const nombre = document.getElementById("nombre").value;
+  const cantidad = document.getElementById("cantidad").value;
+
+  alert(
+    "Alimento: " + nombre +
+    "\nCantidad: " + cantidad
+  );
 }
