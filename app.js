@@ -15,6 +15,7 @@ function diasHastaCaducidad(fecha) {
 }
 
 function colorCaducidad(dias) {
+  if (dias < 0) return "#EF4444";
   if (dias <= 3) return "#EF4444";
   if (dias <= 7) return "#FACC15";
 
@@ -23,38 +24,65 @@ function colorCaducidad(dias) {
 
 function mostrarAlimentos() {
 
-  const lista = document.getElementById("lista-alimentos");
+  const lista =
+    document.getElementById("lista-alimentos");
 
   if (!lista) return;
 
   lista.innerHTML = "";
 
-  alimentos.forEach((alimento, indice) => {
+  const filtro =
+    document.getElementById("searchInput")
+      ?.value.toLowerCase() || "";
 
-    const dias =
-      diasHastaCaducidad(alimento.caducidad);
+  alimentos
+    .filter(alimento =>
+      alimento.nombre
+        .toLowerCase()
+        .includes(filtro)
+    )
+    .forEach((alimento, indice) => {
 
-    const tarjeta = document.createElement("div");
+      const dias =
+        diasHastaCaducidad(alimento.caducidad);
 
-    tarjeta.className = "card";
+      const tarjeta =
+        document.createElement("div");
 
-    tarjeta.innerHTML = `
-      <h3>${alimento.nombre}</h3>
-      <p>Cantidad: ${alimento.cantidad}</p>
-      <p>Caduca: ${new Date(alimento.caducidad)
-        .toLocaleDateString("es-ES")}</p>
-      <p style="color:${colorCaducidad(dias)};font-weight:bold;">
-        ${dias} días
-      </p>
+      let clase = "card";
 
-      <button onclick="eliminarAlimento(${indice})">
-        🗑️ Eliminar
-      </button>
-    `;
+      if (dias < 0) {
+        clase += " caducado";
+      } else if (dias <= 7) {
+        clase += " proximo";
+      }
 
-    lista.appendChild(tarjeta);
+      tarjeta.className = clase;
 
-  });
+      tarjeta.innerHTML = `
+        <h3>${alimento.nombre}</h3>
+
+        <p>Cantidad: ${alimento.cantidad}</p>
+
+        <p>
+          Caduca:
+          ${new Date(alimento.caducidad)
+            .toLocaleDateString("es-ES")}
+        </p>
+
+        <p style="color:${colorCaducidad(dias)};font-weight:bold;">
+          ${dias < 0
+            ? "Caducado"
+            : dias + " días"}
+        </p>
+
+        <button onclick="eliminarAlimento(${indice})">
+          🗑️ Eliminar
+        </button>
+      `;
+
+      lista.appendChild(tarjeta);
+    });
 
   actualizarDashboard();
 }
@@ -62,10 +90,13 @@ function mostrarAlimentos() {
 function agregarAlimento() {
 
   const nombre =
-    document.getElementById("nombre").value.trim();
+    document.getElementById("nombre")
+      .value.trim();
 
   const cantidad =
-    Number(document.getElementById("cantidad").value);
+    Number(
+      document.getElementById("cantidad").value
+    );
 
   const caducidad =
     document.getElementById("caducidad").value;
@@ -104,7 +135,6 @@ function eliminarAlimento(indice) {
   alimentos.splice(indice, 1);
 
   guardarAlimentos();
-
   mostrarAlimentos();
 }
 
@@ -119,17 +149,19 @@ function actualizarDashboard() {
     const dias =
       diasHastaCaducidad(alimento.caducidad);
 
-    if (dias <= 7) {
+    if (dias >= 0 && dias <= 7) {
       proximos++;
     }
 
   });
 
   const totalElement =
-    document.getElementById("total-productos");
+    document.getElementById("total-productos") ||
+    document.getElementById("totalProductos");
 
   const proximosElement =
-    document.getElementById("productos-caducar");
+    document.getElementById("productos-caducar") ||
+    document.getElementById("caducarPronto");
 
   if (totalElement) {
     totalElement.textContent = total;
