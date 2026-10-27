@@ -168,37 +168,19 @@ function actualizarDashboard() {
     document.getElementById("productos-caducar") ||
     document.getElementById("caducarPronto");
 
-  if (totalElement) {
-    totalElement.textContent = total;
-  }
-
-  if (proximosElement) {
-    proximosElement.textContent = proximos;
-  }
-
   const caducadosElement =
     document.getElementById("caducados");
 
-  if (caducadosElement) {
-    caducadosElement.textContent = caducados;
-  }
-
-}
-
-  const totalElement =
-    document.getElementById("total-productos") ||
-    document.getElementById("totalProductos");
-
-  const proximosElement =
-    document.getElementById("productos-caducar") ||
-    document.getElementById("caducarPronto");
-
   if (totalElement) {
     totalElement.textContent = total;
   }
 
   if (proximosElement) {
     proximosElement.textContent = proximos;
+  }
+
+  if (caducadosElement) {
+    caducadosElement.textContent = caducados;
   }
 }
 
@@ -209,4 +191,3 @@ document.addEventListener(
     actualizarDashboard();
   }
 );
-
