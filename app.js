@@ -105,13 +105,13 @@ function mostrarAlimentos() {
       <p style="color:${colorCaducidad(dias)};font-weight:bold;">
 
       ${dias < 0
-        ? `Caducado hace ${Math.abs(dias)} días`
-        : dias === 0
-          ? "Caduca hoy"
-          : dias === 1
-            ? "Caduca mañana"
-            : `${dias} días`}
-
+      ? `Caducado hace ${Math.abs(dias)} días`
+      : dias === 0
+        ? "Caduca hoy"
+        : dias === 1
+          ? "Caduca mañana"
+          : `Caduca en ${dias} días`}
+      
       </p>
 
       <button onclick="eliminarAlimento(${alimentos.indexOf(alimento)})">
