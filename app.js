@@ -1,7 +1,13 @@
 let alimentos = JSON.parse(localStorage.getItem("alimentos")) || [];
 
+let compra = JSON.parse(localStorage.getItem("compra")) || [];
+
 function guardarAlimentos() {
   localStorage.setItem("alimentos", JSON.stringify(alimentos));
+}
+
+function guardarCompra() {
+  localStorage.setItem("compra", JSON.stringify(compra));
 }
 
 function diasHastaCaducidad(fecha) {
@@ -56,21 +62,27 @@ function mostrarAlimentos() {
       categoria === "" ||
       alimento.categoria === categoria;
 
-    return coincideNombre &&
-           coincideCategoria;
+    return (
+      coincideNombre &&
+      coincideCategoria
+    );
   });
 
-  filtrados.sort((a,b) => {
+  filtrados.sort((a, b) => {
 
-    return new Date(a.caducidad) -
-           new Date(b.caducidad);
+    return (
+      new Date(a.caducidad) -
+      new Date(b.caducidad)
+    );
 
   });
 
-  filtrados.forEach((alimento, indice) => {
+  filtrados.forEach((alimento) => {
 
     const dias =
-      diasHastaCaducidad(alimento.caducidad);
+      diasHastaCaducidad(
+        alimento.caducidad
+      );
 
     const tarjeta =
       document.createElement("div");
@@ -78,13 +90,9 @@ function mostrarAlimentos() {
     let clase = "card";
 
     if (dias < 0) {
-
       clase += " caducado";
-
     } else if (dias <= 7) {
-
       clase += " proximo";
-
     }
 
     tarjeta.className = clase;
@@ -94,144 +102,8 @@ function mostrarAlimentos() {
 
       <p>Categoría: ${alimento.categoria}</p>
 
-      <p>Cantidad: ${alimento.cantidad}</p>
-
       <p>
-      Caduca:
-      ${new Date(alimento.caducidad)
-      .toLocaleDateString("es-ES")}
-      </p>
+        Cantidad: ${alimento.cantidad}
 
-      <p style="color:${colorCaducidad(dias)};font-weight:bold;">
-
-      ${dias < 0
-      ? `Caducado hace ${Math.abs(dias)} días`
-      : dias === 0
-        ? "Caduca hoy"
-        : dias === 1
-          ? "Caduca mañana"
-          : `Caduca en ${dias} días`}
-      
-      </p>
-
-      <button onclick="eliminarAlimento(${alimentos.indexOf(alimento)})">
-        🗑️ Eliminar
-      </button>
-    `;
-
-    lista.appendChild(tarjeta);
-  });
-
-  actualizarDashboard();
-}
-
-function agregarAlimento() {
-
-  const nombre =
-    document.getElementById("nombre")
-    .value.trim();
-
-  const cantidad =
-    Number(
-      document.getElementById("cantidad")
-      .value
-    );
-
-  const categoria =
-    document.getElementById("categoria")
-    .value;
-
-  const caducidad =
-    document.getElementById("caducidad")
-    .value;
-
-  if (!nombre) {
-    alert("Introduce un nombre");
-    return;
-  }
-
-  if (cantidad <= 0) {
-    alert("Cantidad inválida");
-    return;
-  }
-
-  alimentos.push({
-
-    nombre,
-    cantidad,
-    categoria,
-    caducidad
-
-  });
-
-  guardarAlimentos();
-
-  mostrarAlimentos();
-
-  document.getElementById("nombre").value = "";
-  document.getElementById("cantidad").value = "";
-  document.getElementById("caducidad").value = "";
-}
-
-function eliminarAlimento(indice) {
-
-  alimentos.splice(indice,1);
-
-  guardarAlimentos();
-
-  mostrarAlimentos();
-}
-
-function actualizarDashboard() {
-
-  const total =
-    alimentos.length;
-
-  let proximos = 0;
-
-  let caducados = 0;
-
-  alimentos.forEach(alimento => {
-
-    const dias =
-      diasHastaCaducidad(alimento.caducidad);
-
-    if (dias < 0)
-      caducados++;
-
-    if (dias >= 0 && dias <= 7)
-      proximos++;
-
-  });
-
-  const totalElement =
-    document.getElementById("total-productos") ||
-    document.getElementById("totalProductos");
-
-  const proximosElement =
-    document.getElementById("productos-caducar") ||
-    document.getElementById("caducarPronto");
-
-  const caducadosElement =
-    document.getElementById("caducados");
-
-  if (totalElement)
-    totalElement.textContent = total;
-
-  if (proximosElement)
-    proximosElement.textContent = proximos;
-
-  if (caducadosElement)
-    caducadosElement.textContent = caducados;
-}
-
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    mostrarAlimentos();
-
-    actualizarDashboard();
-
-  }
-);
+        ${alimento.cantidad <= 1
+          ? '<span class="stock-bajo">⚠️ Stock Bajo</
