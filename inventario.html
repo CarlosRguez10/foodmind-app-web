@@ -6,31 +6,76 @@
   <title>Inventario - FoodMind</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <h1>📦 Inventario</h1>
 
 <div class="card">
+
   <h3>Añadir alimento</h3>
 
-  <input id="nombre" type="text" placeholder="Nombre del alimento">
+  <input
+    id="nombre"
+    type="text"
+    placeholder="Nombre del alimento"
+  >
 
-  <input id="cantidad" type="number" min="1" placeholder="Cantidad">
+  <input
+    id="cantidad"
+    type="number"
+    min="1"
+    placeholder="Cantidad"
+  >
 
-  <input id="caducidad" type="date">
+  <select id="categoria">
+
+    <option value="Fruta">🍎 Fruta</option>
+    <option value="Verdura">🥦 Verdura</option>
+    <option value="Lácteos">🥛 Lácteos</option>
+    <option value="Carne">🥩 Carne</option>
+    <option value="Pescado">🐟 Pescado</option>
+    <option value="Bebidas">🥤 Bebidas</option>
+    <option value="Otros">📦 Otros</option>
+
+  </select>
+
+  <input
+    id="caducidad"
+    type="date"
+  >
 
   <button onclick="agregarAlimento()">
     Añadir
   </button>
+
 </div>
 
 <div class="card">
+
   <input
     type="text"
     id="searchInput"
     placeholder="🔍 Buscar alimento..."
     oninput="mostrarAlimentos()"
   >
+
+  <select
+    id="categoryFilter"
+    onchange="mostrarAlimentos()"
+  >
+
+    <option value="">Todas las categorías</option>
+    <option value="Fruta">Fruta</option>
+    <option value="Verdura">Verdura</option>
+    <option value="Lácteos">Lácteos</option>
+    <option value="Carne">Carne</option>
+    <option value="Pescado">Pescado</option>
+    <option value="Bebidas">Bebidas</option>
+    <option value="Otros">Otros</option>
+
+  </select>
+
 </div>
 
 <div class="stats-grid">
