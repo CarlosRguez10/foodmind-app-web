@@ -143,17 +143,47 @@ function actualizarDashboard() {
   const total = alimentos.length;
 
   let proximos = 0;
+  let caducados = 0;
 
   alimentos.forEach(alimento => {
 
     const dias =
       diasHastaCaducidad(alimento.caducidad);
 
+    if (dias < 0) {
+      caducados++;
+    }
+
     if (dias >= 0 && dias <= 7) {
       proximos++;
     }
 
   });
+
+  const totalElement =
+    document.getElementById("total-productos") ||
+    document.getElementById("totalProductos");
+
+  const proximosElement =
+    document.getElementById("productos-caducar") ||
+    document.getElementById("caducarPronto");
+
+  if (totalElement) {
+    totalElement.textContent = total;
+  }
+
+  if (proximosElement) {
+    proximosElement.textContent = proximos;
+  }
+
+  const caducadosElement =
+    document.getElementById("caducados");
+
+  if (caducadosElement) {
+    caducadosElement.textContent = caducados;
+  }
+
+}
 
   const totalElement =
     document.getElementById("total-productos") ||
