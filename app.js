@@ -7,15 +7,15 @@ function guardarAlimentos() {
 function diasHastaCaducidad(fecha) {
 
   const hoy = new Date();
-
-  hoy.setHours(0,0,0,0);
+  hoy.setHours(0, 0, 0, 0);
 
   const vencimiento = new Date(fecha);
+  vencimiento.setHours(0, 0, 0, 0);
 
   const diferencia =
     vencimiento - hoy;
 
-  return Math.ceil(
+  return Math.floor(
     diferencia / (1000 * 60 * 60 * 24)
   );
 }
@@ -105,8 +105,12 @@ function mostrarAlimentos() {
       <p style="color:${colorCaducidad(dias)};font-weight:bold;">
 
       ${dias < 0
-      ? "Caducado"
-      : dias + " días"}
+        ? `Caducado hace ${Math.abs(dias)} días`
+        : dias === 0
+          ? "Caduca hoy"
+          : dias === 1
+            ? "Caduca mañana"
+            : `${dias} días`}
 
       </p>
 
