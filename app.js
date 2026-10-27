@@ -106,4 +106,268 @@ function mostrarAlimentos() {
         Cantidad: ${alimento.cantidad}
 
         ${alimento.cantidad <= 1
-          ? '<span class="stock-bajo">⚠️ Stock Bajo</
+          ? '<span class="stock-bajo">⚠️ Stock Bajo</span>'
+          : ''}
+      </p>
+
+      <p>
+        Caduca:
+        ${new Date(alimento.caducidad)
+          .toLocaleDateString("es-ES")}
+      </p>
+
+      <p style="color:${colorCaducidad(dias)};font-weight:bold;">
+
+      ${dias < 0
+      ? `Caducado hace ${Math.abs(dias)} días`
+      : dias === 0
+        ? "Caduca hoy"
+        : dias === 1
+          ? "Caduca mañana"
+          : `Caduca en ${dias} días`}
+
+      </p>
+
+      <button onclick="anadirACompra('${alimento.nombre}')">
+        🛒 Comprar
+      </button>
+
+      <button onclick="eliminarAlimento(${alimentos.indexOf(alimento)})">
+        🗑️ Eliminar
+      </button>
+    `;
+
+    lista.appendChild(tarjeta);
+
+  });
+
+  actualizarDashboard();
+}
+
+function agregarAlimento() {
+
+  const nombre =
+    document.getElementById("nombre")
+    .value.trim();
+
+  const cantidad =
+    Number(
+      document.getElementById("cantidad")
+      .value
+    );
+
+  const categoria =
+    document.getElementById("categoria")
+    .value;
+
+  const caducidad =
+    document.getElementById("caducidad")
+    .value;
+
+  if (!nombre) {
+    alert("Introduce un nombre");
+    return;
+  }
+
+  if (cantidad <= 0) {
+    alert("Cantidad inválida");
+    return;
+  }
+
+  alimentos.push({
+
+    nombre,
+    cantidad,
+    categoria,
+    caducidad
+
+  });
+
+  guardarAlimentos();
+
+  mostrarAlimentos();
+
+  document.getElementById("nombre").value = "";
+  document.getElementById("cantidad").value = "";
+  document.getElementById("caducidad").value = "";
+}
+
+function eliminarAlimento(indice) {
+
+  alimentos.splice(indice, 1);
+
+  guardarAlimentos();
+
+  mostrarAlimentos();
+}
+
+function anadirACompra(nombre) {
+
+  compra.push({
+    nombre,
+    comprado: false
+  });
+
+  guardarCompra();
+
+  actualizarDashboard();
+
+  alert("Añadido a la compra");
+}
+
+function agregarCompra() {
+
+  const input =
+    document.getElementById("nuevoProducto");
+
+  if (!input) return;
+
+  const nombre =
+    input.value.trim();
+
+  if (!nombre) return;
+
+  compra.push({
+    nombre,
+    comprado: false
+  });
+
+  guardarCompra();
+
+  mostrarCompra();
+
+  input.value = "";
+}
+
+function marcarComprado(indice) {
+
+  compra[indice].comprado =
+    !compra[indice].comprado;
+
+  guardarCompra();
+
+  mostrarCompra();
+
+  actualizarDashboard();
+}
+
+function eliminarCompra(indice) {
+
+  compra.splice(indice, 1);
+
+  guardarCompra();
+
+  mostrarCompra();
+
+  actualizarDashboard();
+}
+
+function mostrarCompra() {
+
+  const lista =
+    document.getElementById("lista-compra");
+
+  if (!lista) return;
+
+  lista.innerHTML = "";
+
+  compra.forEach((item, indice) => {
+
+    const tarjeta =
+      document.createElement("div");
+
+    tarjeta.className =
+      item.comprado
+      ? "card comprado"
+      : "card";
+
+    tarjeta.innerHTML = `
+
+      <h3>${item.nombre}</h3>
+
+      <button onclick="marcarComprado(${indice})">
+        ${item.comprado
+          ? "↩️ Reabrir"
+          : "✅ Comprado"}
+      </button>
+
+      <button onclick="eliminarCompra(${indice})">
+        🗑️ Eliminar
+      </button>
+
+    `;
+
+    lista.appendChild(tarjeta);
+
+  });
+
+}
+
+function actualizarDashboard() {
+
+  const total =
+    alimentos.length;
+
+  let proximos = 0;
+
+  let caducados = 0;
+
+  alimentos.forEach(alimento => {
+
+    const dias =
+      diasHastaCaducidad(
+        alimento.caducidad
+      );
+
+    if (dias < 0)
+      caducados++;
+
+    if (dias >= 0 && dias <= 7)
+      proximos++;
+
+  });
+
+  const pendientes =
+    compra.filter(
+      item => !item.comprado
+    ).length;
+
+  const totalElement =
+    document.getElementById("total-productos") ||
+    document.getElementById("totalProductos");
+
+  const proximosElement =
+    document.getElementById("productos-caducar") ||
+    document.getElementById("caducarPronto");
+
+  const caducadosElement =
+    document.getElementById("caducados");
+
+  const compraElement =
+    document.getElementById("compraPendiente");
+
+  if (totalElement)
+    totalElement.textContent = total;
+
+  if (proximosElement)
+    proximosElement.textContent = proximos;
+
+  if (caducadosElement)
+    caducadosElement.textContent = caducados;
+
+  if (compraElement)
+    compraElement.textContent = pendientes;
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    mostrarAlimentos();
+
+    mostrarCompra();
+
+    actualizarDashboard();
+
+  }
+);
