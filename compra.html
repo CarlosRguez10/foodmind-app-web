@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista Compra - FoodMind</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🛒 Lista de Compra</h1>
+
+<div class="card">
+
+  <input
+    id="nuevoProducto"
+    type="text"
+    placeholder="Producto"
+  >
+
+  <button onclick="agregarCompra()">
+    Añadir
+  </button>
+
+</div>
+
+<div id="lista-compra"></div>
+
+<div class="bottom-nav">
+  <div><a href="index.html">🏠 Inicio</a></div>
+  <div><a href="inventario.html">📦 Inventario</a></div>
+  <div><a href="compra.html">🛒 Compra</a></div>
+  <div>⚙️ Ajustes</div>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
