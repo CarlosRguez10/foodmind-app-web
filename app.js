@@ -204,5 +204,9 @@ function actualizarDashboard() {
 
 document.addEventListener(
   "DOMContentLoaded",
-  mostrarAlimentos
+  () => {
+    mostrarAlimentos();
+    actualizarDashboard();
+  }
 );
+
