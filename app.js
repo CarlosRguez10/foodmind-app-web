@@ -62,27 +62,22 @@ function mostrarAlimentos() {
       categoria === "" ||
       alimento.categoria === categoria;
 
-    return (
-      coincideNombre &&
-      coincideCategoria
-    );
+    return coincideNombre &&
+           coincideCategoria;
+
   });
 
   filtrados.sort((a, b) => {
 
-    return (
-      new Date(a.caducidad) -
-      new Date(b.caducidad)
-    );
+    return new Date(a.caducidad) -
+           new Date(b.caducidad);
 
   });
 
   filtrados.forEach((alimento) => {
 
     const dias =
-      diasHastaCaducidad(
-        alimento.caducidad
-      );
+      diasHastaCaducidad(alimento.caducidad);
 
     const tarjeta =
       document.createElement("div");
@@ -104,9 +99,8 @@ function mostrarAlimentos() {
 
       <p>
         Cantidad: ${alimento.cantidad}
-
         ${alimento.cantidad <= 1
-          ? '<span class="stock-bajo">⚠️ Stock Bajo</span>'
+          ? '<span class="stock-bajo"> ⚠️ Stock Bajo</span>'
           : ''}
       </p>
 
@@ -148,21 +142,21 @@ function agregarAlimento() {
 
   const nombre =
     document.getElementById("nombre")
-    .value.trim();
+      .value.trim();
 
   const cantidad =
     Number(
       document.getElementById("cantidad")
-      .value
+        .value
     );
 
   const categoria =
     document.getElementById("categoria")
-    .value;
+      .value;
 
   const caducidad =
     document.getElementById("caducidad")
-    .value;
+      .value;
 
   if (!nombre) {
     alert("Introduce un nombre");
@@ -175,12 +169,10 @@ function agregarAlimento() {
   }
 
   alimentos.push({
-
     nombre,
     cantidad,
     categoria,
     caducidad
-
   });
 
   guardarAlimentos();
@@ -236,6 +228,8 @@ function agregarCompra() {
 
   mostrarCompra();
 
+  actualizarDashboard();
+
   input.value = "";
 }
 
@@ -262,6 +256,19 @@ function eliminarCompra(indice) {
   actualizarDashboard();
 }
 
+function limpiarComprados() {
+
+  compra = compra.filter(
+    item => !item.comprado
+  );
+
+  guardarCompra();
+
+  mostrarCompra();
+
+  actualizarDashboard();
+}
+
 function mostrarCompra() {
 
   const lista =
@@ -270,6 +277,17 @@ function mostrarCompra() {
   if (!lista) return;
 
   lista.innerHTML = "";
+
+  const botonLimpiar =
+    document.createElement("button");
+
+  botonLimpiar.innerHTML =
+    "🧹 Limpiar comprados";
+
+  botonLimpiar.onclick =
+    limpiarComprados;
+
+  lista.appendChild(botonLimpiar);
 
   compra.forEach((item, indice) => {
 
@@ -282,19 +300,19 @@ function mostrarCompra() {
       : "card";
 
     tarjeta.innerHTML = `
-
       <h3>${item.nombre}</h3>
 
       <button onclick="marcarComprado(${indice})">
-        ${item.comprado
-          ? "↩️ Reabrir"
-          : "✅ Comprado"}
+
+      ${item.comprado
+      ? "↩️ Reabrir"
+      : "✅ Comprado"}
+
       </button>
 
       <button onclick="eliminarCompra(${indice})">
         🗑️ Eliminar
       </button>
-
     `;
 
     lista.appendChild(tarjeta);
@@ -305,11 +323,9 @@ function mostrarCompra() {
 
 function actualizarDashboard() {
 
-  const total =
-    alimentos.length;
+  const total = alimentos.length;
 
   let proximos = 0;
-
   let caducados = 0;
 
   alimentos.forEach(alimento => {
