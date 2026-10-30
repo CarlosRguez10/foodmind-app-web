@@ -75,4 +75,85 @@ button:hover {
   padding: 15px;
   display: flex;
   justify-content: space-around;
-  box-shadow: 0 -2px 5px rgba(0,0,
+  box-shadow: 0 -2px 5px rgba(0,0,0,.1);
+}
+
+.bottom-nav a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+}
+
+.caducado {
+  border-left: 5px solid #EF4444;
+}
+
+.proximo {
+  border-left: 5px solid #FACC15;
+}
+
+.comprado {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.stock-bajo {
+  color: #EF4444;
+  font-weight: bold;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.card p {
+  margin: 6px 0;
+}
+
+.filtro-titulo {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 600px) {
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bottom-nav {
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+    margin-right: 0;
+  }
+
+}
+
+/* AUTOCOMPLETADO V0.7 */
+
+#sugerencias {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.sugerencia-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.sugerencia-item:last-child {
+  border-bottom: none;
+}
+
+.sugerencia-item:hover {
+  background: #f3f4f6;
+}
