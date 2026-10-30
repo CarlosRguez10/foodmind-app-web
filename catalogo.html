@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Catálogo - FoodMind</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="catalogo.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body>
+
+  <h1>📚 Mi Catálogo</h1>
+
+  <input
+    type="text"
+    id="buscarCatalogo"
+    placeholder="Buscar producto..."
+    oninput="mostrarCatalogoUsuario()"
+  >
+
+  <div id="listaCatalogo"></div>
+
+  <div class="bottom-nav">
+    <a href="index.html">🏠 Inicio</a>
+    <a href="inventario.html">📦 Inventario</a>
+    <a href="compra.html">🛒 Compra</a>
+    <a href="catalogo.html">📚 Catálogo</a>
+  </div>
+
+</body>
+
+</html>
