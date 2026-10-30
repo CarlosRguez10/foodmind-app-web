@@ -202,7 +202,7 @@ function autocompletarProducto() {
   if (!clave) return;
   
   const producto = catalogo[clave];
-
+  document.getElementById("nombre").value = clave;
 
   if (!producto) return;
 
