@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,8 +29,15 @@
     placeholder="Cantidad"
   >
 
-  <select id="categoria">
+  <select id="unidad">
+    <option value="uds">Unidades</option>
+    <option value="g">Gramos</option>
+    <option value="kg">Kilogramos</option>
+    <option value="ml">Mililitros</option>
+    <option value="l">Litros</option>
+  </select>
 
+  <select id="categoria">
     <option value="Fruta">🍎 Fruta</option>
     <option value="Verdura">🥦 Verdura</option>
     <option value="Lácteos">🥛 Lácteos</option>
@@ -37,7 +45,12 @@
     <option value="Pescado">🐟 Pescado</option>
     <option value="Bebidas">🥤 Bebidas</option>
     <option value="Otros">📦 Otros</option>
+  </select>
 
+  <select id="ubicacion">
+    <option value="Nevera">🥛 Nevera</option>
+    <option value="Congelador">❄️ Congelador</option>
+    <option value="Despensa">🥫 Despensa</option>
   </select>
 
   <input
@@ -64,7 +77,6 @@
     id="categoryFilter"
     onchange="mostrarAlimentos()"
   >
-
     <option value="">Todas las categorías</option>
     <option value="Fruta">Fruta</option>
     <option value="Verdura">Verdura</option>
@@ -73,7 +85,16 @@
     <option value="Pescado">Pescado</option>
     <option value="Bebidas">Bebidas</option>
     <option value="Otros">Otros</option>
+  </select>
 
+  <select
+    id="locationFilter"
+    onchange="mostrarAlimentos()"
+  >
+    <option value="">Todas las ubicaciones</option>
+    <option value="Nevera">🥛 Nevera</option>
+    <option value="Congelador">❄️ Congelador</option>
+    <option value="Despensa">🥫 Despensa</option>
   </select>
 
 </div>
