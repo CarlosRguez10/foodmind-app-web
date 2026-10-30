@@ -36,7 +36,27 @@ function guardarEnCatalogo() {
   const nombre =
     document.getElementById("nombre")
       .value.trim();
+  const fechaCaducidad =
+  document.getElementById("caducidad")
+    .value;
 
+let conservacion = 30;
+
+if (fechaCaducidad) {
+
+  const hoy = new Date();
+
+  const fecha = new Date(fechaCaducidad);
+
+  conservacion = Math.max(
+    1,
+    Math.ceil(
+      (fecha - hoy) /
+      (1000 * 60 * 60 * 24)
+    )
+  );
+
+}
   if (!nombre) {
 
     alert("Introduce un nombre");
@@ -57,7 +77,14 @@ function guardarEnCatalogo() {
     return;
 
   }
-
+  const stockMinimo = prompt(
+      "Indica el stock mínimo para este producto:",
+      "1"
+    );
+    
+    if (stockMinimo === null) {
+      return;
+    }
   catalogoUsuario[nombre] = {
 
     categoria:
@@ -72,10 +99,10 @@ function guardarEnCatalogo() {
       document.getElementById("unidad")
       .value,
 
-    conservacion: 30,
+    conservacion: conservacion,
 
-    stockMinimo: 1
-
+    stockMinimo: Number(stockMinimo) || 1
+    
   };
 
   guardarCatalogoUsuario();
