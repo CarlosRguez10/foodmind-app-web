@@ -185,6 +185,44 @@ function mostrarAlimentos() {
 
 }
 
+function autocompletarProducto() {
+
+  const nombre =
+    document.getElementById("nombre")
+      .value.trim();
+
+  if (!nombre) return;
+
+  const producto =
+    catalogo[nombre];
+
+  if (!producto) return;
+
+  document.getElementById("categoria")
+    .value = producto.categoria;
+
+  document.getElementById("ubicacion")
+    .value = producto.ubicacion;
+
+  document.getElementById("unidad")
+    .value = producto.unidad;
+
+  const fecha = new Date();
+
+  fecha.setDate(
+    fecha.getDate() +
+    producto.conservacion
+  );
+
+  const fechaFormateada =
+    fecha.toISOString()
+      .split("T")[0];
+
+  document.getElementById("caducidad")
+    .value = fechaFormateada;
+
+}
+
 function agregarAlimento() {
 
   const nombre =
