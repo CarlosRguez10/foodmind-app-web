@@ -34,7 +34,23 @@ function colorCaducidad(dias) {
   return "#22C55E";
 
 }
+function iconoCategoria(categoria) {
 
+  const iconos = {
+
+    "Fruta": "🍎",
+    "Verdura": "🥦",
+    "Lácteos": "🥛",
+    "Carne": "🥩",
+    "Pescado": "🐟",
+    "Bebidas": "🥤",
+    "Otros": "📦"
+
+  };
+
+  return iconos[categoria] || "📦";
+
+}
 function mostrarAlimentos() {
 
   const lista =
@@ -111,10 +127,12 @@ function mostrarAlimentos() {
     tarjeta.innerHTML = `
       <h3>${alimento.nombre}</h3>
 
-      <p>📂 ${alimento.categoria}</p>
-
       <p>
-      📍 ${alimento.ubicacion || "Sin ubicación"}
+      ${iconoCategoria(alimento.categoria)}
+      ${alimento.categoria}
+      </p>
+      <p>
+      ${alimento.ubicacion || "Sin ubicación"}
       </p>
 
       <p>
@@ -213,16 +231,25 @@ function agregarAlimento() {
 
   if (existente) {
 
-    existente.cantidad += cantidad;
+  if (existente.unidad !== unidad) {
 
-    if (
-      new Date(caducidad) <
-      new Date(existente.caducidad)
-    ) {
-      existente.caducidad = caducidad;
-    }
+    alert(
+      `⚠️ El producto "${nombre}" ya existe con la unidad "${existente.unidad}".\n\nConvierte la cantidad manualmente antes de añadirla.`
+    );
 
-  } else {
+    return;
+  }
+
+  existente.cantidad += cantidad;
+
+  if (
+    new Date(caducidad) <
+    new Date(existente.caducidad)
+  ) {
+    existente.caducidad = caducidad;
+  }
+
+} else {
 
     alimentos.push({
       nombre,
