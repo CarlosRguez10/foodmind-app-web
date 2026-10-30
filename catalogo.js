@@ -200,7 +200,7 @@ const catalogo = {
   unidad: "g",
   conservacion: 10,
   stockMinimo: 125
-} 
+}, 
 
   // 🥦 VERDURAS
 
@@ -402,7 +402,7 @@ const catalogo = {
   unidad: "kg",
   conservacion: 21,
   stockMinimo: 0.5
-}
+},
 
 // 🥚 HUEVOS
 
@@ -598,7 +598,7 @@ const catalogo = {
   unidad: "g",
   conservacion: 20,
   stockMinimo: 100
-}
+},
 
 // 🥩 CARNE
 
@@ -768,7 +768,7 @@ const catalogo = {
   unidad: "g",
   conservacion: 90,
   stockMinimo: 200
-}
+},
 
 // 🐟 PESCADO Y MARISCO
 
@@ -930,7 +930,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 1095,
   stockMinimo: 2
-}
+},
 
 // 🍝 PASTA Y ARROZ
 
@@ -1134,7 +1134,7 @@ const catalogo = {
   unidad: "kg",
   conservacion: 730,
   stockMinimo: 0.5
-}
+},
 
 // 🌾 CEREALES
 
@@ -1256,7 +1256,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 180,
   stockMinimo: 1
-}
+},
 // 🧂 CONDIMENTOS
 
 "Sal": {
@@ -1457,7 +1457,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 365,
   stockMinimo: 1
-}
+},
 // 🥫 CONSERVAS
 
 "Maíz Dulce": {
@@ -1658,7 +1658,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 730,
   stockMinimo: 1
-}
+},
 // 🥤 BEBIDAS
 
 "Agua": {
@@ -1875,7 +1875,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 730,
   stockMinimo: 1
-}
+},
 // 🍷 BODEGA
 
 "Vino Tinto": {
@@ -1996,7 +1996,7 @@ const catalogo = {
   unidad: "uds",
   conservacion: 3650,
   stockMinimo: 1
-}
+},
 // 🍪 SNACKS Y DULCES
 
 "Chocolate": {
@@ -2197,7 +2197,7 @@ const catalogo = {
   unidad: "g",
   conservacion: 365,
   stockMinimo: 100
-}
+},
 // ❄️ CONGELADOS
 
 "Pizza Congelada": {
@@ -2398,6 +2398,6 @@ const catalogo = {
   unidad: "uds",
   conservacion: 180,
   stockMinimo: 1
-}
+},
 
 };
