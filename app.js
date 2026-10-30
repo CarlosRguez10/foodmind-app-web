@@ -1,5 +1,4 @@
 let alimentos = JSON.parse(localStorage.getItem("alimentos")) || [];
-
 let compra = JSON.parse(localStorage.getItem("compra")) || [];
 
 function guardarAlimentos() {
@@ -18,12 +17,12 @@ function diasHastaCaducidad(fecha) {
   const vencimiento = new Date(fecha);
   vencimiento.setHours(0, 0, 0, 0);
 
-  const diferencia =
-    vencimiento - hoy;
+  const diferencia = vencimiento - hoy;
 
   return Math.floor(
     diferencia / (1000 * 60 * 60 * 24)
   );
+
 }
 
 function colorCaducidad(dias) {
@@ -33,6 +32,7 @@ function colorCaducidad(dias) {
   if (dias <= 7) return "#FACC15";
 
   return "#22C55E";
+
 }
 
 function mostrarAlimentos() {
@@ -52,6 +52,10 @@ function mostrarAlimentos() {
     document.getElementById("categoryFilter")
       ?.value || "";
 
+  const ubicacion =
+    document.getElementById("locationFilter")
+      ?.value || "";
+
   let filtrados = alimentos.filter(alimento => {
 
     const coincideNombre =
@@ -62,15 +66,27 @@ function mostrarAlimentos() {
       categoria === "" ||
       alimento.categoria === categoria;
 
-    return coincideNombre &&
-           coincideCategoria;
+    const coincideUbicacion =
+      ubicacion === "" ||
+      alimento.ubicacion === ubicacion;
+
+    return (
+      coincideNombre &&
+      coincideCategoria &&
+      coincideUbicacion
+    );
 
   });
 
   filtrados.sort((a, b) => {
 
-    return new Date(a.caducidad) -
-           new Date(b.caducidad);
+    const diasA =
+      diasHastaCaducidad(a.caducidad);
+
+    const diasB =
+      diasHastaCaducidad(b.caducidad);
+
+    return diasA - diasB;
 
   });
 
@@ -95,39 +111,51 @@ function mostrarAlimentos() {
     tarjeta.innerHTML = `
       <h3>${alimento.nombre}</h3>
 
-      <p>Categoría: ${alimento.categoria}</p>
+      <p>📂 ${alimento.categoria}</p>
 
       <p>
-        Cantidad: ${alimento.cantidad}
-        ${alimento.cantidad <= 1
-          ? '<span class="stock-bajo"> ⚠️ Stock Bajo</span>'
-          : ''}
+      📍 ${alimento.ubicacion || "Sin ubicación"}
       </p>
 
       <p>
-        Caduca:
-        ${new Date(alimento.caducidad)
-          .toLocaleDateString("es-ES")}
+      Cantidad:
+      ${alimento.cantidad}
+      ${alimento.unidad || "uds"}
+      ${alimento.cantidad <= 1
+        ? '<span class="stock-bajo"> ⚠️ Stock bajo</span>'
+        : ''}
       </p>
 
-      <p style="color:${colorCaducidad(dias)};font-weight:bold;">
+      <p>
+      Caduca:
+      ${new Date(alimento.caducidad)
+        .toLocaleDateString("es-ES")}
+      </p>
 
-      ${dias < 0
-      ? `Caducado hace ${Math.abs(dias)} días`
-      : dias === 0
+      <p
+      style="
+      color:${colorCaducidad(dias)};
+      font-weight:bold;
+      ">
+      ${
+        dias < 0
+        ? `Caducado hace ${Math.abs(dias)} días`
+        : dias === 0
         ? "Caduca hoy"
         : dias === 1
-          ? "Caduca mañana"
-          : `Caduca en ${dias} días`}
-
+        ? "Caduca mañana"
+        : `Caduca en ${dias} días`
+      }
       </p>
 
-      <button onclick="anadirACompra('${alimento.nombre}')">
-        🛒 Comprar
+      <button
+      onclick="anadirACompra('${alimento.nombre}')">
+      🛒 Comprar
       </button>
 
-      <button onclick="eliminarAlimento(${alimentos.indexOf(alimento)})">
-        🗑️ Eliminar
+      <button
+      onclick="eliminarAlimento(${alimentos.indexOf(alimento)})">
+      🗑️ Eliminar
       </button>
     `;
 
@@ -136,6 +164,7 @@ function mostrarAlimentos() {
   });
 
   actualizarDashboard();
+
 }
 
 function agregarAlimento() {
@@ -149,6 +178,14 @@ function agregarAlimento() {
       document.getElementById("cantidad")
         .value
     );
+
+  const unidad =
+    document.getElementById("unidad")
+      .value;
+
+  const ubicacion =
+    document.getElementById("ubicacion")
+      .value;
 
   const categoria =
     document.getElementById("categoria")
@@ -168,12 +205,35 @@ function agregarAlimento() {
     return;
   }
 
-  alimentos.push({
-    nombre,
-    cantidad,
-    categoria,
-    caducidad
-  });
+  const existente = alimentos.find(
+    a =>
+      a.nombre.toLowerCase() ===
+      nombre.toLowerCase()
+  );
+
+  if (existente) {
+
+    existente.cantidad += cantidad;
+
+    if (
+      new Date(caducidad) <
+      new Date(existente.caducidad)
+    ) {
+      existente.caducidad = caducidad;
+    }
+
+  } else {
+
+    alimentos.push({
+      nombre,
+      cantidad,
+      unidad,
+      ubicacion,
+      categoria,
+      caducidad
+    });
+
+  }
 
   guardarAlimentos();
 
@@ -182,6 +242,7 @@ function agregarAlimento() {
   document.getElementById("nombre").value = "";
   document.getElementById("cantidad").value = "";
   document.getElementById("caducidad").value = "";
+
 }
 
 function eliminarAlimento(indice) {
@@ -191,9 +252,22 @@ function eliminarAlimento(indice) {
   guardarAlimentos();
 
   mostrarAlimentos();
+
 }
 
 function anadirACompra(nombre) {
+
+  const duplicado =
+    compra.find(
+      item =>
+      item.nombre.toLowerCase() ===
+      nombre.toLowerCase()
+    );
+
+  if (duplicado) {
+    alert("Ya está en la lista");
+    return;
+  }
 
   compra.push({
     nombre,
@@ -202,9 +276,10 @@ function anadirACompra(nombre) {
 
   guardarCompra();
 
+  mostrarCompra();
+
   actualizarDashboard();
 
-  alert("Añadido a la compra");
 }
 
 function agregarCompra() {
@@ -219,6 +294,18 @@ function agregarCompra() {
 
   if (!nombre) return;
 
+  const existe =
+    compra.find(
+      item =>
+      item.nombre.toLowerCase() ===
+      nombre.toLowerCase()
+    );
+
+  if (existe) {
+    alert("Ya está en la lista");
+    return;
+  }
+
   compra.push({
     nombre,
     comprado: false
@@ -231,6 +318,7 @@ function agregarCompra() {
   actualizarDashboard();
 
   input.value = "";
+
 }
 
 function marcarComprado(indice) {
@@ -243,6 +331,7 @@ function marcarComprado(indice) {
   mostrarCompra();
 
   actualizarDashboard();
+
 }
 
 function eliminarCompra(indice) {
@@ -254,19 +343,22 @@ function eliminarCompra(indice) {
   mostrarCompra();
 
   actualizarDashboard();
+
 }
 
 function limpiarComprados() {
 
-  compra = compra.filter(
-    item => !item.comprado
-  );
+  compra =
+    compra.filter(
+      item => !item.comprado
+    );
 
   guardarCompra();
 
   mostrarCompra();
 
   actualizarDashboard();
+
 }
 
 function mostrarCompra() {
@@ -304,14 +396,16 @@ function mostrarCompra() {
 
       <button onclick="marcarComprado(${indice})">
 
-      ${item.comprado
-      ? "↩️ Reabrir"
-      : "✅ Comprado"}
+      ${
+        item.comprado
+        ? "↩️ Reabrir"
+        : "✅ Comprado"
+      }
 
       </button>
 
       <button onclick="eliminarCompra(${indice})">
-        🗑️ Eliminar
+      🗑️ Eliminar
       </button>
     `;
 
@@ -373,6 +467,7 @@ function actualizarDashboard() {
 
   if (compraElement)
     compraElement.textContent = pendientes;
+
 }
 
 document.addEventListener(
