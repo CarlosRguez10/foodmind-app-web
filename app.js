@@ -193,8 +193,16 @@ function autocompletarProducto() {
 
   if (!nombre) return;
 
-  const producto =
-    catalogo[nombre];
+  const clave = Object.keys(catalogo).find(
+    item =>
+      item.toLowerCase() ===
+      nombre.toLowerCase()
+  );
+  
+  if (!clave) return;
+  
+  const producto = catalogo[clave];
+
 
   if (!producto) return;
 
