@@ -1,5 +1,9 @@
 let alimentos = JSON.parse(localStorage.getItem("alimentos")) || [];
 let compra = JSON.parse(localStorage.getItem("compra")) || [];
+let catalogoUsuario =
+  JSON.parse(
+    localStorage.getItem("catalogoUsuario")
+  ) || {};
 
 function guardarAlimentos() {
   localStorage.setItem("alimentos", JSON.stringify(alimentos));
@@ -7,6 +11,24 @@ function guardarAlimentos() {
 
 function guardarCompra() {
   localStorage.setItem("compra", JSON.stringify(compra));
+}
+
+function guardarCatalogoUsuario() {
+
+  localStorage.setItem(
+    "catalogoUsuario",
+    JSON.stringify(catalogoUsuario)
+  );
+
+}
+
+function obtenerCatalogoCompleto() {
+
+  return {
+    ...catalogo,
+    ...catalogoUsuario
+  };
+
 }
 
 function diasHastaCaducidad(fecha) {
@@ -230,7 +252,7 @@ function autocompletarProducto() {
   if (!nombre) return;
 
   const coincidencias =
-    Object.keys(catalogo)
+    Object.keys(obtenerCatalogoCompleto())
       .filter(producto =>
         producto.toLowerCase()
           .includes(nombre.toLowerCase())
@@ -254,7 +276,7 @@ function autocompletarProducto() {
 
   });
 
-  const clave = Object.keys(catalogo).find(
+  const clave = Object.keys(obtenerCatalogoCompleto()).find(
     item =>
       item.toLowerCase() ===
       nombre.toLowerCase()
@@ -268,7 +290,7 @@ function autocompletarProducto() {
 
 function seleccionarProducto(clave) {
 
-  const producto = catalogo[clave];
+  const producto = obtenerCatalogoCompleto()[clave];
 
   document.getElementById("nombre").value =
     clave;
