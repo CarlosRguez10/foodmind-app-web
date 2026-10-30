@@ -40,13 +40,26 @@ function iconoCategoria(categoria) {
 
     "Fruta": "🍎",
     "Verdura": "🥦",
+    "Huevos": "🥚",
     "Lácteos": "🥛",
     "Carne": "🥩",
     "Pescado": "🐟",
+    "Conservas": "🥫",
+    "Cereales": "🌾",
+    "Legumbres": "🫘",
+    "Pasta y Arroz": "🍝",
+    "Condimentos": "🧂",
     "Bebidas": "🥤",
+    "Bodega": "🍷",
+    "Snacks y Dulces": "🍪",
+    "Congelados": "❄️",
     "Otros": "📦"
 
   };
+
+  return iconos[categoria] || "📦";
+
+}
 
   return iconos[categoria] || "📦";
 }
