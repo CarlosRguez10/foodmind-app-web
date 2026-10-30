@@ -61,9 +61,6 @@ function iconoCategoria(categoria) {
 
 }
 
-  return iconos[categoria] || "📦";
-}
-
 function iconoUbicacion(ubicacion) {
 
   if (!ubicacion) return "📦 ";
