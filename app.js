@@ -132,6 +132,7 @@ function mostrarAlimentos() {
       ${alimento.categoria}
       </p>
       <p>
+      ${iconoUbicacion(alimento.ubicacion)}
       ${alimento.ubicacion || "Sin ubicación"}
       </p>
 
