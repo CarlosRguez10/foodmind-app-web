@@ -191,29 +191,65 @@ function autocompletarProducto() {
     document.getElementById("nombre")
       .value.trim();
 
+  const sugerencias =
+    document.getElementById("sugerencias");
+
+  sugerencias.innerHTML = "";
+
   if (!nombre) return;
+
+  const coincidencias =
+    Object.keys(catalogo)
+      .filter(producto =>
+        producto.toLowerCase()
+          .includes(nombre.toLowerCase())
+      )
+      .slice(0, 5);
+
+  coincidencias.forEach(producto => {
+
+    const item =
+      document.createElement("div");
+
+    item.className = "sugerencia-item";
+
+    item.textContent = producto;
+
+    item.onclick = () => {
+      seleccionarProducto(producto);
+    };
+
+    sugerencias.appendChild(item);
+
+  });
 
   const clave = Object.keys(catalogo).find(
     item =>
       item.toLowerCase() ===
       nombre.toLowerCase()
   );
-  
+
   if (!clave) return;
-  
+
+  seleccionarProducto(clave);
+
+}
+
+function seleccionarProducto(clave) {
+
   const producto = catalogo[clave];
-  document.getElementById("nombre").value = clave;
 
-  if (!producto) return;
+  document.getElementById("nombre").value =
+    clave;
 
-  document.getElementById("categoria")
-    .value = producto.categoria;
+  document.getElementById("categoria").value =
+    producto.categoria;
 
-  document.getElementById("ubicacion")
-    .value = producto.ubicacion;
+  document.getElementById("ubicacion").value =
+    producto.ubicacion;
 
-  document.getElementById("unidad")
-    .value = producto.unidad;
+  document.getElementById("unidad").value =
+    producto.unidad;
 
   const fecha = new Date();
 
@@ -222,12 +258,11 @@ function autocompletarProducto() {
     producto.conservacion
   );
 
-  const fechaFormateada =
-    fecha.toISOString()
-      .split("T")[0];
+  document.getElementById("caducidad").value =
+    fecha.toISOString().split("T")[0];
 
-  document.getElementById("caducidad")
-    .value = fechaFormateada;
+  document.getElementById("sugerencias")
+    .innerHTML = "";
 
 }
 
