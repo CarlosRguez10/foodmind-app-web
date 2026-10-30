@@ -49,8 +49,28 @@ function iconoCategoria(categoria) {
   };
 
   return iconos[categoria] || "📦";
+}
+
+function iconoUbicacion(ubicacion) {
+
+  if (!ubicacion) return "📦 ";
+
+  if (ubicacion.includes("Nevera"))
+    return "🧊 ";
+
+  if (ubicacion.includes("Congelador"))
+    return "❄️ ";
+
+  if (ubicacion.includes("Despensa"))
+    return "🗄️ ";
+
+  if (ubicacion.includes("Bodega"))
+    return "🍷 ";
+
+  return "📦 ";
 
 }
+
 function mostrarAlimentos() {
 
   const lista =
