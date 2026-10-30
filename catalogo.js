@@ -2399,4 +2399,5 @@ const catalogo = {
   conservacion: 180,
   stockMinimo: 1
 }
+
 };
