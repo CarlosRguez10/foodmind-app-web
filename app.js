@@ -31,6 +31,61 @@ function obtenerCatalogoCompleto() {
 
 }
 
+function guardarEnCatalogo() {
+
+  const nombre =
+    document.getElementById("nombre")
+      .value.trim();
+
+  if (!nombre) {
+
+    alert("Introduce un nombre");
+
+    return;
+
+  }
+
+  const catalogoCompleto =
+    obtenerCatalogoCompleto();
+
+  if (catalogoCompleto[nombre]) {
+
+    alert(
+      "Ese producto ya existe en el catálogo"
+    );
+
+    return;
+
+  }
+
+  catalogoUsuario[nombre] = {
+
+    categoria:
+      document.getElementById("categoria")
+      .value,
+
+    ubicacion:
+      document.getElementById("ubicacion")
+      .value,
+
+    unidad:
+      document.getElementById("unidad")
+      .value,
+
+    conservacion: 30,
+
+    stockMinimo: 1
+
+  };
+
+  guardarCatalogoUsuario();
+
+  alert(
+    `✅ ${nombre} guardado en el catálogo`
+  );
+
+}
+
 function diasHastaCaducidad(fecha) {
 
   const hoy = new Date();
