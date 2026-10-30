@@ -2400,4 +2400,5 @@ const catalogo = {
   stockMinimo: 1
 },
 
+ 
 };
