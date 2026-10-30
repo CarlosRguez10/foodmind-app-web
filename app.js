@@ -658,6 +658,98 @@ function mostrarCompra() {
 
 }
 
+function mostrarCatalogoUsuario() {
+
+  const contenedor =
+    document.getElementById("listaCatalogo");
+
+  if (!contenedor) return;
+
+  const busqueda =
+    document.getElementById("buscarCatalogo")
+      ?.value
+      .toLowerCase() || "";
+
+  contenedor.innerHTML = "";
+
+  const productos =
+    Object.entries(catalogoUsuario)
+      .filter(([nombre]) =>
+        nombre.toLowerCase().includes(busqueda)
+      )
+      .sort();
+
+  if (productos.length === 0) {
+
+    contenedor.innerHTML = `
+      <div class="card">
+        No hay productos personalizados.
+      </div>
+    `;
+
+    return;
+  }
+
+  productos.forEach(([nombre, producto]) => {
+
+    contenedor.innerHTML += `
+      <div class="card">
+
+        <h3>${nombre}</h3>
+
+        <p>
+          ${iconoCategoria(producto.categoria)}
+          ${producto.categoria}
+        </p>
+
+        <p>
+          ${iconoUbicacion(producto.ubicacion)}
+          ${producto.ubicacion}
+        </p>
+
+        <p>
+          Unidad: ${producto.unidad}
+        </p>
+
+        <p>
+          Conservación:
+          ${producto.conservacion} días
+        </p>
+
+        <p>
+          Stock mínimo:
+          ${producto.stockMinimo}
+        </p>
+
+        <button onclick="eliminarProductoCatalogo('${nombre}')">
+          🗑️ Eliminar
+        </button>
+
+      </div>
+    `;
+
+  });
+
+}
+
+function eliminarProductoCatalogo(nombre) {
+
+  if (
+    !confirm(
+      `¿Eliminar ${nombre} del catálogo?`
+    )
+  ) {
+    return;
+  }
+
+  delete catalogoUsuario[nombre];
+
+  guardarCatalogoUsuario();
+
+  mostrarCatalogoUsuario();
+
+}
+
 function actualizarDashboard() {
 
   const total = alimentos.length;
@@ -720,6 +812,16 @@ document.addEventListener(
     mostrarAlimentos();
 
     mostrarCompra();
+
+    if (
+      document.getElementById(
+        "listaCatalogo"
+      )
+    ) {
+
+      mostrarCatalogoUsuario();
+
+    }
 
     actualizarDashboard();
 
