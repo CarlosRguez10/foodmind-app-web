@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FoodMind</title>
 
- <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -17,21 +17,30 @@
 
   <div class="stat-card">
     <h3>Total</h3>
-  <div id="total-productos" class="stat-number">
-  0
-  </div>
+    <div id="total-productos" class="stat-number">
+      0
+    </div>
   </div>
 
   <div class="stat-card">
     <h3>Caducan</h3>
-  <div id="productos-caducar" class="stat-number">
-  0
-  </div>
+    <div id="productos-caducar" class="stat-number">
+      0
+    </div>
   </div>
 
   <div class="stat-card">
     <h3>Caducados</h3>
-    <div id="caducados" class="stat-number">0</div>
+    <div id="caducados" class="stat-number">
+      0
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <h3>Compra</h3>
+    <div id="compraPendiente" class="stat-number">
+      0
+    </div>
   </div>
 
   <div class="stat-card">
@@ -40,25 +49,47 @@
       0
     </div>
   </div>
-  
-  <div class="stat-card">
-    <h3>Compra</h3>
-    <div id="compraPendiente" class="stat-number">0</div>
+
+</div>
+
+<div class="card">
+
+  <h3>🚨 Atención inmediata</h3>
+
+  <div id="resumenAlertas">
+
+    <p>✅ Todo correcto</p>
+
   </div>
 
 </div>
 
 <div class="card">
-  <h3>Acciones rápidas</h3>
-  <button onclick="location.href='inventario.html'">
-  📦 Inventario
-  </button>
-  
-  <button onclick="location.href='compra.html'">
-  🛒 Compra
-  </button>
+
+  <h3>⏳ Consumir pronto</h3>
+
+  <div id="resumenCaducidad">
+
+    <p>✅ Nada próximo a caducar</p>
+
+  </div>
+
 </div>
-  
+
+<div class="card">
+
+  <h3>Acciones rápidas</h3>
+
+  <button onclick="location.href='inventario.html'">
+    📦 Inventario
+  </button>
+
+  <button onclick="location.href='compra.html'">
+    🛒 Compra
+  </button>
+
+</div>
+
 <div class="bottom-nav">
   <div><a href="index.html">🏠 Inicio</a></div>
   <div><a href="inventario.html">📦 Inventario</a></div>
@@ -69,5 +100,6 @@
 
 <script src="catalogo.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
