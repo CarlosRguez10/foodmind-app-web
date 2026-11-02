@@ -30,13 +30,6 @@
   </div>
 
   <div class="stat-card">
-    <h3>Caducados</h3>
-    <div id="caducados" class="stat-number">
-      0
-    </div>
-  </div>
-
-  <div class="stat-card">
     <h3>Compra</h3>
     <div id="compraPendiente" class="stat-number">
       0
@@ -54,45 +47,19 @@
 
 <div class="card">
 
-  <h3>🚨 Atención inmediata</h3>
+  <h3>🛒 Compra recomendada</h3>
+
   <button onclick="anadirCriticosACompra()">
     🛒 Añadir productos críticos
   </button>
+
   <div id="resumenAlertas">
-
     <p>✅ Todo correcto</p>
-
   </div>
 
 </div>
 
 <div class="card">
-
-  <h3>📊 Estado de la despensa</h3>
-
-  <div id="estadoDespensa">
-
-    🟢 Excelente
-
-  </div>
-
-</div>
-
-  <div class="card">
-
-  <h3>💚 Salud de la despensa</h3>
-
-  <div class="barra-salud">
-
-    <div id="barraSalud" class="barra-salud-fill">
-      100%
-    </div>
-
-  </div>
-
-</div>
-
-  <div class="card">
 
   <h3>⭐ Recomendación de hoy</h3>
 
@@ -103,26 +70,30 @@
   </div>
 
 </div>
-  
+
 <div class="card">
 
-  <h3>🚨 Cocinar primero</h3>
+  <h3>💚 Salud de la despensa</h3>
 
-  <div id="cocinarPrimero">
+  <div
+    id="mensajeSalud"
+    class="mensaje-salud"
+  >
 
-    Analizando despensa...
+    🟢 Excelente
 
   </div>
 
-</div>
-  
-<div class="card">
+  <div class="barra-salud">
 
-  <h3>⏳ Consumir pronto</h3>
+    <div
+      id="barraSalud"
+      class="barra-salud-fill"
+    >
 
-  <div id="resumenCaducidad">
+      100%
 
-    <p>✅ Nada próximo a caducar</p>
+    </div>
 
   </div>
 
