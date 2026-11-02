@@ -914,6 +914,8 @@ function actualizarDashboard() {
     generarRecetaDelDia();
   
     generarCocinarPrimero();  
+
+    generarMenuSemanal();
 }
 function generarDashboardPremium() {
 
@@ -1478,6 +1480,96 @@ function generarRecetaDelDia() {
   </div>
 
 `;
+
+}
+
+function generarMenuSemanal() {
+
+  const contenedor =
+    document.getElementById(
+      "menuSemanal"
+    );
+
+  if (!contenedor) return;
+
+  const ingredientesDisponibles =
+    alimentos.map(alimento =>
+      alimento.nombre.toLowerCase()
+    );
+
+  const recetasDisponibles =
+    recetas.filter(receta =>
+
+      receta.ingredientes.every(
+        ingrediente =>
+
+          ingredientesDisponibles.some(
+            alimento =>
+              alimento.includes(
+                ingrediente.toLowerCase()
+              )
+          )
+
+      )
+
+    );
+
+  if (
+    recetasDisponibles.length === 0
+  ) {
+
+    contenedor.innerHTML = `
+      <p>
+        😔 No hay recetas disponibles
+      </p>
+    `;
+
+    return;
+
+  }
+
+  const diasSemana = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes"
+  ];
+
+  let html = "";
+
+  diasSemana.forEach((dia, indice) => {
+
+    const receta =
+      recetasDisponibles[
+        indice %
+        recetasDisponibles.length
+      ];
+
+    html += `
+
+      <div style="
+        margin-bottom:12px;
+        padding:10px;
+        background:#f9fafb;
+        border-radius:8px;
+      ">
+
+        <strong>
+          ${dia}
+        </strong>
+
+        <br>
+
+        🍳 ${receta.nombre}
+
+      </div>
+
+    `;
+
+  });
+
+  contenedor.innerHTML = html;
 
 }
 
