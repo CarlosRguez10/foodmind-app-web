@@ -157,3 +157,19 @@ button:hover {
 .sugerencia-item:hover {
   background: #f3f4f6;
 }
+
+.stock-critico {
+  color: white;
+  background: #EF4444;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.stock-bajo {
+  color: #92400E;
+  background: #FDE68A;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
