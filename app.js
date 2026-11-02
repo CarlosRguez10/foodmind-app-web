@@ -805,7 +805,7 @@ function actualizarDashboard() {
     const stockMinimo =
       producto?.stockMinimo || 1;
 
-    if (alimento.cantidad <= stockMinimo) {
+    if (alimento.cantidad <= stockMinimo * 1.5) {
       alertasStock++;
     }
 
