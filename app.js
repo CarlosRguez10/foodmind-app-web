@@ -1054,16 +1054,8 @@ function actualizarBarraSalud() {
 
   if (!barra) return;
 
-  if (alimentos.length === 0) {
-
-    barra.style.width = "100%";
-    barra.style.background = "#22C55E";
-    barra.textContent = "100%";
-
-    return;
-  }
-
-  let puntosPerdidos = 0;
+  let criticos = 0;
+  let bajos = 0;
 
   alimentos.forEach(alimento => {
 
@@ -1077,7 +1069,7 @@ function actualizarBarraSalud() {
       alimento.cantidad <= stockMinimo
     ) {
 
-      puntosPerdidos += 10;
+      criticos++;
 
     } else if (
 
@@ -1086,20 +1078,28 @@ function actualizarBarraSalud() {
 
     ) {
 
-      puntosPerdidos += 5;
+      bajos++;
 
     }
 
   });
 
   let salud =
+    100 -
+    (criticos * 15) -
+    (bajos * 5);
+
+  salud =
     Math.max(
       0,
-      100 - puntosPerdidos
+      Math.min(100, salud)
     );
 
-  barra.style.width = salud + "%";
-  barra.textContent = salud + "%";
+  barra.style.width =
+    salud + "%";
+
+  barra.textContent =
+    salud + "%";
 
   if (salud >= 80) {
 
