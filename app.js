@@ -848,7 +848,108 @@ function actualizarDashboard() {
   if (alertasElement)
     alertasElement.textContent = alertasStock;
 
+    generarDashboardPremium();
+  
 }
+function generarDashboardPremium() {
+
+  const resumenAlertas =
+    document.getElementById("resumenAlertas");
+
+  const resumenCaducidad =
+    document.getElementById("resumenCaducidad");
+
+  if (!resumenAlertas || !resumenCaducidad) {
+    return;
+  }
+
+  const productosCriticos =
+    alimentos.filter(alimento => {
+
+      const producto =
+        obtenerCatalogoCompleto()[alimento.nombre];
+
+      const stockMinimo =
+        producto?.stockMinimo || 1;
+
+      return alimento.cantidad <= stockMinimo;
+
+    });
+
+  const productosCaducar =
+    alimentos
+      .filter(alimento => {
+
+        const dias =
+          diasHastaCaducidad(
+            alimento.caducidad
+          );
+
+        return dias >= 0 && dias <= 7;
+
+      })
+      .sort((a, b) => {
+
+        return (
+          diasHastaCaducidad(a.caducidad) -
+          diasHastaCaducidad(b.caducidad)
+        );
+
+      });
+
+  if (productosCriticos.length === 0) {
+
+    resumenAlertas.innerHTML = `
+      <p>✅ Todo correcto</p>
+    `;
+
+  } else {
+
+    resumenAlertas.innerHTML =
+      productosCriticos
+        .slice(0, 5)
+        .map(producto => `
+          <p>
+            🚨 <strong>${producto.nombre}</strong>
+            (${producto.cantidad} ${producto.unidad})
+          </p>
+        `)
+        .join("");
+
+  }
+
+  if (productosCaducar.length === 0) {
+
+    resumenCaducidad.innerHTML = `
+      <p>✅ Nada próximo a caducar</p>
+    `;
+
+  } else {
+
+    resumenCaducidad.innerHTML =
+      productosCaducar
+        .slice(0, 5)
+        .map(producto => {
+
+          const dias =
+            diasHastaCaducidad(
+              producto.caducidad
+            );
+
+          return `
+            <p>
+              ⏳ <strong>${producto.nombre}</strong>
+              (${dias} días)
+            </p>
+          `;
+
+        })
+        .join("");
+
+  }
+
+}
+
 document.addEventListener(
   "DOMContentLoaded",
   () => {
