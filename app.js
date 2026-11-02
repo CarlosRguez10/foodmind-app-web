@@ -1532,13 +1532,11 @@ function generarMenuSemanal() {
         const stockMinimo =
           producto?.stockMinimo || 1;
 
-        const esCritico =
-          alimento.cantidad <= stockMinimo;
-
         return {
           ...alimento,
           dias,
-          esCritico
+          esCritico:
+            alimento.cantidad <= stockMinimo
         };
 
       })
@@ -1548,28 +1546,24 @@ function generarMenuSemanal() {
         if (
           a.esCritico &&
           !b.esCritico
-        ) {
-          return -1;
-        }
+        ) return -1;
 
         if (
           !a.esCritico &&
           b.esCritico
-        ) {
-          return 1;
-        }
+        ) return 1;
 
         return a.dias - b.dias;
 
       });
 
-  const recetasElegidas = [];
+  const recetasSeleccionadas = [];
 
   alimentosOrdenados.forEach(
     alimento => {
 
-      const receta =
-        recetas.find(receta =>
+      const compatibles =
+        recetas.filter(receta =>
 
           receta.ingredientes.some(
             ingrediente =>
@@ -1580,25 +1574,34 @@ function generarMenuSemanal() {
                   ingrediente.toLowerCase()
                 )
 
-          ) &&
-
-          !recetasElegidas.some(
-            usada =>
-              usada.nombre ===
-              receta.nombre
           )
 
         );
 
-      if (receta) {
-        recetasElegidas.push(receta);
-      }
+      compatibles.forEach(receta => {
+
+        const yaExiste =
+          recetasSeleccionadas.some(
+            item =>
+              item.nombre ===
+              receta.nombre
+          );
+
+        if (!yaExiste) {
+
+          recetasSeleccionadas.push(
+            receta
+          );
+
+        }
+
+      });
 
     }
   );
 
   if (
-    recetasElegidas.length === 0
+    recetasSeleccionadas.length === 0
   ) {
 
     contenedor.innerHTML = `
@@ -1627,21 +1630,43 @@ function generarMenuSemanal() {
     (dia, indice) => {
 
       const receta =
-        recetasElegidas[
-          indice %
-          recetasElegidas.length
-        ];
+        recetasSeleccionadas[indice];
 
-      html += `
+      if (!receta) {
 
-        <div
-          style="
+        html += `
+
+          <div style="
             margin-bottom:12px;
             padding:12px;
             background:#f9fafb;
             border-radius:10px;
-          "
-        >
+          ">
+
+            <strong>
+              ${dia}
+            </strong>
+
+            <br>
+
+            🍽️ Libre
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+      html += `
+
+        <div style="
+          margin-bottom:12px;
+          padding:12px;
+          background:#f9fafb;
+          border-radius:10px;
+        ">
 
           <strong>
             ${dia}
