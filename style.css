@@ -192,3 +192,10 @@ button:hover {
   justify-content: center;
   transition: 0.4s;
 }
+.mensaje-salud {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
