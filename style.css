@@ -173,3 +173,22 @@ button:hover {
   border-radius: 6px;
   font-weight: bold;
 }
+
+.barra-salud {
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.barra-salud-fill {
+  height: 30px;
+  background: #22C55E;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.4s;
+}
