@@ -1556,6 +1556,164 @@ function generarRecetaDelDia() {
 
 }
 
+function generarMenuSemanal() {
+
+  const contenedor =
+    document.getElementById(
+      "menuSemanal"
+    );
+
+  if (!contenedor) return;
+
+  const alimentosOrdenados =
+    [...alimentos]
+      .map(alimento => {
+
+        const dias =
+          diasHastaCaducidad(
+            alimento.caducidad
+          );
+
+        const producto =
+          obtenerCatalogoCompleto()[
+            alimento.nombre
+          ];
+
+        const stockMinimo =
+          producto?.stockMinimo || 1;
+
+        return {
+          ...alimento,
+          dias,
+          esCritico:
+            alimento.cantidad <= stockMinimo
+        };
+
+      })
+      .filter(item => item.dias >= 0)
+      .sort((a, b) => {
+
+        if (a.esCritico && !b.esCritico)
+          return -1;
+
+        if (!a.esCritico && b.esCritico)
+          return 1;
+
+        return a.dias - b.dias;
+
+      });
+
+  const recetasSeleccionadas = [];
+  const ingredientesUsados = [];
+
+  alimentosOrdenados.forEach(
+    alimento => {
+
+      if (
+        ingredientesUsados.includes(
+          alimento.nombre
+        )
+      ) {
+        return;
+      }
+
+      const compatibles =
+        recetas.filter(receta =>
+
+          receta.ingredientes.some(
+            ingrediente =>
+
+              ingrediente.toLowerCase() ===
+              alimento.nombre.toLowerCase()
+
+          )
+
+        );
+
+      if (
+        compatibles.length > 0
+      ) {
+
+        compatibles.sort(
+          (a, b) =>
+
+            b.ingredientes.length -
+            a.ingredientes.length
+
+        );
+
+        const recetaElegida =
+          compatibles[0];
+
+        recetasSeleccionadas.push(
+          recetaElegida
+        );
+
+        recetaElegida.ingredientes.forEach(
+          ingrediente => {
+
+            ingredientesUsados.push(
+              ingrediente
+            );
+
+          }
+        );
+
+      }
+
+    }
+  );
+
+  const diasSemana = [
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+    "Domingo"
+  ];
+
+  let html = "";
+
+  diasSemana.forEach(
+    (dia, indice) => {
+
+      const receta =
+        recetasSeleccionadas[indice];
+
+      html += `
+
+        <div style="
+          margin-bottom:12px;
+          padding:12px;
+          background:#f9fafb;
+          border-radius:10px;
+        ">
+
+          <strong>
+            ${dia}
+          </strong>
+
+          <br>
+
+          ${
+            receta
+              ? `🍳 ${receta.nombre}`
+              : "🍽️ Libre"
+          }
+
+        </div>
+
+      `;
+
+    }
+  );
+
+  contenedor.innerHTML = html;
+
+}
+
 document.addEventListener(
   "DOMContentLoaded",
   () => {
