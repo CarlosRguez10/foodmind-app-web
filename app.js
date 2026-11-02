@@ -555,6 +555,63 @@ function anadirACompra(nombre) {
 
 }
 
+function anadirCriticosACompra() {
+
+  let añadidos = 0;
+
+  alimentos.forEach(alimento => {
+
+    const producto =
+      obtenerCatalogoCompleto()[alimento.nombre];
+
+    const stockMinimo =
+      producto?.stockMinimo || 1;
+
+    if (
+      alimento.cantidad <= stockMinimo
+    ) {
+
+      const existe =
+        compra.find(item =>
+          item.nombre.toLowerCase() ===
+          alimento.nombre.toLowerCase()
+        );
+
+      if (!existe) {
+
+        compra.push({
+          nombre: alimento.nombre,
+          comprado: false
+        });
+
+        añadidos++;
+
+      }
+
+    }
+
+  });
+
+  guardarCompra();
+
+  if (añadidos > 0) {
+
+    alert(
+      `✅ ${añadidos} productos añadidos a la lista de compra`
+    );
+
+  } else {
+
+    alert(
+      "✅ Todos los productos críticos ya estaban en la lista"
+    );
+
+  }
+
+  actualizarDashboard();
+
+}
+
 function agregarCompra() {
 
   const input =
