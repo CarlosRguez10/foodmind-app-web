@@ -851,6 +851,8 @@ function actualizarDashboard() {
     generarDashboardPremium();
   
     actualizarEstadoDespensa();
+
+    actualizarBarraSalud();
   
 }
 function generarDashboardPremium() {
@@ -1040,6 +1042,79 @@ function actualizarEstadoDespensa() {
         🟢 Excelente
       </div>
     `;
+
+  }
+
+}
+
+function actualizarBarraSalud() {
+
+  const barra =
+    document.getElementById("barraSalud");
+
+  if (!barra) return;
+
+  if (alimentos.length === 0) {
+
+    barra.style.width = "100%";
+    barra.style.background = "#22C55E";
+    barra.textContent = "100%";
+
+    return;
+  }
+
+  let puntosPerdidos = 0;
+
+  alimentos.forEach(alimento => {
+
+    const producto =
+      obtenerCatalogoCompleto()[alimento.nombre];
+
+    const stockMinimo =
+      producto?.stockMinimo || 1;
+
+    if (
+      alimento.cantidad <= stockMinimo
+    ) {
+
+      puntosPerdidos += 10;
+
+    } else if (
+
+      alimento.cantidad <=
+      stockMinimo * 1.5
+
+    ) {
+
+      puntosPerdidos += 5;
+
+    }
+
+  });
+
+  let salud =
+    Math.max(
+      0,
+      100 - puntosPerdidos
+    );
+
+  barra.style.width = salud + "%";
+  barra.textContent = salud + "%";
+
+  if (salud >= 80) {
+
+    barra.style.background =
+      "#22C55E";
+
+  } else if (salud >= 50) {
+
+    barra.style.background =
+      "#FACC15";
+
+  } else {
+
+    barra.style.background =
+      "#EF4444";
 
   }
 
