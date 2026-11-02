@@ -25,7 +25,9 @@ function guardarCatalogoUsuario() {
 function obtenerCatalogoCompleto() {
 
   return {
-    ...catalogo,
+    ...(typeof catalogo !== "undefined"
+      ? catalogo
+      : {}),
     ...catalogoUsuario
   };
 
