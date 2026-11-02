@@ -1188,49 +1188,121 @@ function generarRecetas() {
 
   if (!contenedor) return;
 
-  const ingredientes =
+  const ingredientesDisponibles =
     alimentos.map(alimento =>
       alimento.nombre.toLowerCase()
     );
 
-  const disponibles =
-    recetas.filter(receta => {
+  const resultados =
+    recetas.map(receta => {
 
-      return receta.ingredientes.every(
-        ingrediente => {
+      const faltantes =
+        receta.ingredientes.filter(
+          ingrediente => {
 
-          return ingredientes.some(
-            alimento =>
-              alimento.includes(
-                ingrediente.toLowerCase()
-              )
-          );
+            return !ingredientesDisponibles.some(
+              alimento =>
+                alimento.includes(
+                  ingrediente.toLowerCase()
+                )
+            );
 
-        }
-      );
+          }
+        );
+
+      return {
+        ...receta,
+        faltantes
+      };
 
     });
 
-  if (disponibles.length === 0) {
+  const completas =
+    resultados.filter(
+      receta =>
+        receta.faltantes.length === 0
+    );
 
-    contenedor.innerHTML = `
+  const casiCompletas =
+    resultados.filter(
+      receta =>
+        receta.faltantes.length > 0 &&
+        receta.faltantes.length <= 2
+    );
+
+  let html = "";
+
+  if (completas.length > 0) {
+
+    html += `
+      <h4>✅ Puedes cocinar ahora</h4>
+    `;
+
+    html += completas
+      .slice(0, 5)
+      .map(receta => `
+        <p>
+          🍳 <strong>${receta.nombre}</strong>
+        </p>
+      `)
+      .join("");
+
+  }
+
+  if (casiCompletas.length > 0) {
+
+    html += `
+      <h4 style="margin-top:15px">
+        🛒 Te faltan pocos ingredientes
+      </h4>
+    `;
+
+    html += casiCompletas
+      .slice(0, 5)
+      .map(receta => `
+
+        <div style="
+          margin-bottom:12px;
+          padding:10px;
+          background:#f9fafb;
+          border-radius:8px;
+        ">
+
+          <strong>
+            🍳 ${receta.nombre}
+          </strong>
+
+          <br>
+
+          <small>
+
+            Falta:
+
+            ${receta.faltantes.join(", ")}
+
+          </small>
+
+        </div>
+
+      `)
+      .join("");
+
+  }
+
+  if (
+    completas.length === 0 &&
+    casiCompletas.length === 0
+  ) {
+
+    html = `
       <p>
         😔 No hay recetas disponibles
       </p>
     `;
 
-    return;
   }
 
-  contenedor.innerHTML =
-    disponibles
-      .slice(0, 5)
-      .map(receta => `
-        <p>
-          🍳 ${receta.nombre}
-        </p>
-      `)
-      .join("");
+  contenedor.innerHTML = html;
 
 }
 
