@@ -1529,27 +1529,6 @@ function generarRecetaDelDia() {
         )
         .join("<br>")}
 
-      ${
-        ingredientesUrgentes.length
-        ? `
-          <br><br>
-
-          <strong>
-            🚨 Aprovecha:
-          </strong>
-
-          <br><br>
-
-          ${ingredientesUrgentes
-            .map(
-              ingrediente =>
-                `⚠️ ${ingrediente}`
-            )
-            .join("<br>")}
-        `
-        : ""
-      }
-
     </div>
 
   `;
