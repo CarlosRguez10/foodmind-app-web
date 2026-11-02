@@ -918,12 +918,11 @@ function actualizarDashboard() {
 function generarDashboardPremium() {
 
   const resumenAlertas =
-    document.getElementById("resumenAlertas");
+    document.getElementById(
+      "resumenAlertas"
+    );
 
-  const resumenCaducidad =
-    document.getElementById("resumenCaducidad");
-
-  if (!resumenAlertas || !resumenCaducidad) {
+  if (!resumenAlertas) {
     return;
   }
 
@@ -936,30 +935,11 @@ function generarDashboardPremium() {
       const stockMinimo =
         producto?.stockMinimo || 1;
 
-      return alimento.cantidad <= stockMinimo;
+      return (
+        alimento.cantidad <= stockMinimo
+      );
 
     });
-
-  const productosCaducar =
-    alimentos
-      .filter(alimento => {
-
-        const dias =
-          diasHastaCaducidad(
-            alimento.caducidad
-          );
-
-        return dias >= 0 && dias <= 7;
-
-      })
-      .sort((a, b) => {
-
-        return (
-          diasHastaCaducidad(a.caducidad) -
-          diasHastaCaducidad(b.caducidad)
-        );
-
-      });
 
   if (productosCriticos.length === 0) {
 
@@ -969,46 +949,25 @@ function generarDashboardPremium() {
 
   } else {
 
-    resumenAlertas.innerHTML =
-      productosCriticos
+    resumenAlertas.innerHTML = `
+
+      <p>
+        <strong>
+          ${productosCriticos.length}
+          productos necesitan reposición
+        </strong>
+      </p>
+
+      ${productosCriticos
         .slice(0, 5)
         .map(producto => `
           <p>
-            🚨 <strong>${producto.nombre}</strong>
-            (${producto.cantidad} ${producto.unidad})
+            🚨 ${producto.nombre}
           </p>
         `)
-        .join("");
+        .join("")}
 
-  }
-
-  if (productosCaducar.length === 0) {
-
-    resumenCaducidad.innerHTML = `
-      <p>✅ Nada próximo a caducar</p>
     `;
-
-  } else {
-
-    resumenCaducidad.innerHTML =
-      productosCaducar
-        .slice(0, 5)
-        .map(producto => {
-
-          const dias =
-            diasHastaCaducidad(
-              producto.caducidad
-            );
-
-          return `
-            <p>
-              ⏳ <strong>${producto.nombre}</strong>
-              (${dias} días)
-            </p>
-          `;
-
-        })
-        .join("");
 
   }
 
