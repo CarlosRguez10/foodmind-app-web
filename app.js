@@ -911,8 +911,7 @@ function actualizarDashboard() {
 
     actualizarBarraSalud();
 
-    generarRecetas();
-  
+    generarCocinarPrimero();  
 }
 function generarDashboardPremium() {
 
@@ -1303,6 +1302,126 @@ function generarRecetas() {
   }
 
   contenedor.innerHTML = html;
+
+}
+
+function generarCocinarPrimero() {
+
+  const contenedor =
+    document.getElementById(
+      "cocinarPrimero"
+    );
+
+  if (!contenedor) return;
+
+  const candidatos =
+    alimentos
+      .map(alimento => {
+
+        const dias =
+          diasHastaCaducidad(
+            alimento.caducidad
+          );
+
+        return {
+          ...alimento,
+          dias
+        };
+
+      })
+      .filter(item =>
+        item.dias >= 0
+      )
+      .sort(
+        (a, b) =>
+          a.dias - b.dias
+      );
+
+  if (
+    candidatos.length === 0
+  ) {
+
+    contenedor.innerHTML = `
+      <p>
+        ✅ No hay productos urgentes
+      </p>
+    `;
+
+    return;
+
+  }
+
+  contenedor.innerHTML =
+    candidatos
+      .slice(0, 3)
+      .map(producto => {
+
+        const recetasCompatibles =
+          recetas.filter(receta =>
+            receta.ingredientes.some(
+              ingrediente =>
+                producto.nombre
+                  .toLowerCase()
+                  .includes(
+                    ingrediente
+                      .toLowerCase()
+                  )
+            )
+          );
+
+        return `
+
+          <div style="
+            margin-bottom:15px;
+            padding:12px;
+            background:#f9fafb;
+            border-radius:10px;
+          ">
+
+            <strong>
+              ${
+                producto.nombre
+              }
+            </strong>
+
+            <br>
+
+            ⏳ Caduca en
+            ${producto.dias} días
+
+            <br><br>
+
+            ${
+              recetasCompatibles.length
+                ? `
+                  🍳 Recetas:
+
+                  <ul>
+
+                  ${recetasCompatibles
+                    .slice(0, 3)
+                    .map(
+                      receta => `
+                        <li>
+                          ${receta.nombre}
+                        </li>
+                      `
+                    )
+                    .join("")}
+
+                  </ul>
+                `
+                : `
+                  🍽️ Consumir cuanto antes
+                `
+            }
+
+          </div>
+
+        `;
+
+      })
+      .join("");
 
 }
 
