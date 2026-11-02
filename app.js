@@ -1399,103 +1399,102 @@ function generarRecetaDelDia() {
 
   if (!contenedor) return;
 
-  const candidatos =
+  const alimentosUrgentes =
     alimentos
-      .map(alimento => {
-
-        const dias =
-          diasHastaCaducidad(
-            alimento.caducidad
-          );
-
-        const producto =
-          obtenerCatalogoCompleto()[
-            alimento.nombre
-          ];
-
-        const stockMinimo =
-          producto?.stockMinimo || 1;
-
-        return {
-          ...alimento,
-          dias,
-          esCritico:
-            alimento.cantidad <= stockMinimo
-        };
-
-      })
-      .filter(item => item.dias >= 0)
-      .sort((a, b) => {
-
-        if (
-          a.esCritico &&
-          !b.esCritico
-        ) return -1;
-
-        if (
-          !a.esCritico &&
-          b.esCritico
-        ) return 1;
-
-        return a.dias - b.dias;
-
-      });
-
-  if (candidatos.length === 0) {
-
-    contenedor.innerHTML =
-      "<p>✅ No hay recomendaciones</p>";
-
-    return;
-
-  }
-
-  const productoPrioritario =
-    candidatos[0];
-
-  const recetasCompatibles =
-    recetas
-      .filter(receta =>
-
-        receta.ingredientes.some(
-          ingrediente =>
-
-            ingrediente
-              .toLowerCase() ===
-            productoPrioritario.nombre
-              .toLowerCase()
-
+      .map(alimento => ({
+        ...alimento,
+        dias: diasHastaCaducidad(
+          alimento.caducidad
         )
-
-      )
-      .sort(
-        (a, b) =>
-          b.ingredientes.length -
-          a.ingredientes.length
+      }))
+      .filter(
+        alimento =>
+          alimento.dias >= 0 &&
+          alimento.dias <= 7
       );
 
-  if (
-    recetasCompatibles.length === 0
-  ) {
+  if (alimentosUrgentes.length === 0) {
 
     contenedor.innerHTML = `
-
-      <strong>
-        ${productoPrioritario.nombre}
-      </strong>
-
-      <br><br>
-
-      🍽️ Consumir cuanto antes
-
+      <p>
+        ✅ No hay productos prioritarios
+      </p>
     `;
 
     return;
 
   }
 
-  const receta =
-    recetasCompatibles[0];
+  const rankingRecetas =
+    recetas.map(receta => {
+
+      let puntuacion = 0;
+
+      receta.ingredientes.forEach(
+        ingrediente => {
+
+          const alimento =
+            alimentosUrgentes.find(
+              item =>
+                item.nombre
+                  .toLowerCase() ===
+                ingrediente
+                  .toLowerCase()
+            );
+
+          if (alimento) {
+
+            puntuacion +=
+              (10 - alimento.dias);
+
+          }
+
+        }
+      );
+
+      return {
+        ...receta,
+        puntuacion
+      };
+
+    });
+
+  rankingRecetas.sort(
+    (a, b) =>
+      b.puntuacion - a.puntuacion
+  );
+
+  const mejorReceta =
+    rankingRecetas[0];
+
+  if (
+    !mejorReceta ||
+    mejorReceta.puntuacion === 0
+  ) {
+
+    contenedor.innerHTML = `
+      <p>
+        ✅ No hay recetas prioritarias
+      </p>
+    `;
+
+    return;
+
+  }
+
+  const ingredientesUrgentes =
+    mejorReceta.ingredientes.filter(
+      ingrediente =>
+
+        alimentosUrgentes.some(
+          alimento =>
+            alimento.nombre
+              .toLowerCase() ===
+            ingrediente
+              .toLowerCase()
+        )
+
+    );
 
   contenedor.innerHTML = `
 
@@ -1506,35 +1505,57 @@ function generarRecetaDelDia() {
     ">
 
       <strong>
-        🍳 ${receta.nombre}
+        🍳 ${mejorReceta.nombre}
       </strong>
 
       <br><br>
 
-      ⏱️ ${receta.tiempo} min
+      ⏱️ ${mejorReceta.tiempo} min
 
       <br>
 
-      ⭐ ${receta.dificultad}
+      ⭐ ${mejorReceta.dificultad}
 
       <br><br>
 
-      Ingredientes:
+      Ingredientes a utilizar:
 
       <br><br>
 
-      ${receta.ingredientes
+      ${mejorReceta.ingredientes
         .map(
           ingrediente =>
             `✅ ${ingrediente}`
         )
         .join("<br>")}
 
+      ${
+        ingredientesUrgentes.length
+        ? `
+          <br><br>
+
+          <strong>
+            🚨 Aprovecha:
+          </strong>
+
+          <br><br>
+
+          ${ingredientesUrgentes
+            .map(
+              ingrediente =>
+                `⚠️ ${ingrediente}`
+            )
+            .join("<br>")}
+        `
+        : ""
+      }
+
     </div>
 
   `;
 
 }
+
 document.addEventListener(
   "DOMContentLoaded",
   () => {
