@@ -984,8 +984,22 @@ function actualizarEstadoDespensa() {
 
   if (!mensaje) return;
 
-  let criticos = 0;
-  let bajos = 0;
+  const total =
+    alimentos.length;
+
+  if (total === 0) {
+
+    mensaje.innerHTML =
+      "🟢 Excelente";
+
+    mensaje.style.color =
+      "#22C55E";
+
+    return;
+
+  }
+
+  let alertas = 0;
 
   alimentos.forEach(alimento => {
 
@@ -996,38 +1010,38 @@ function actualizarEstadoDespensa() {
       producto?.stockMinimo || 1;
 
     if (
-      alimento.cantidad <= stockMinimo
-    ) {
-
-      criticos++;
-
-    } else if (
-
       alimento.cantidad <=
       stockMinimo * 1.5
-
     ) {
 
-      bajos++;
+      alertas++;
 
     }
 
   });
 
-  if (criticos >= 5) {
+  const salud =
+    Math.round(
+      ((total - alertas) / total) * 100
+    );
+
+  if (salud >= 90) {
 
     mensaje.innerHTML =
-      "🔴 Compra necesaria";
+      "🟢 Excelente";
 
     mensaje.style.color =
-      "#EF4444";
+      "#22C55E";
 
-  } else if (
+  } else if (salud >= 70) {
 
-    criticos > 0 ||
-    bajos > 3
+    mensaje.innerHTML =
+      "🟢 Buena";
 
-  ) {
+    mensaje.style.color =
+      "#22C55E";
+
+  } else if (salud >= 50) {
 
     mensaje.innerHTML =
       "🟡 Revisar stock";
@@ -1038,10 +1052,10 @@ function actualizarEstadoDespensa() {
   } else {
 
     mensaje.innerHTML =
-      "🟢 Excelente";
+      "🔴 Compra necesaria";
 
     mensaje.style.color =
-      "#22C55E";
+      "#EF4444";
 
   }
 
@@ -1050,12 +1064,31 @@ function actualizarEstadoDespensa() {
 function actualizarBarraSalud() {
 
   const barra =
-    document.getElementById("barraSalud");
+    document.getElementById(
+      "barraSalud"
+    );
 
   if (!barra) return;
 
-  let criticos = 0;
-  let bajos = 0;
+  const total =
+    alimentos.length;
+
+  if (total === 0) {
+
+    barra.style.width =
+      "100%";
+
+    barra.textContent =
+      "100%";
+
+    barra.style.background =
+      "#22C55E";
+
+    return;
+
+  }
+
+  let alertas = 0;
 
   alimentos.forEach(alimento => {
 
@@ -1066,33 +1099,19 @@ function actualizarBarraSalud() {
       producto?.stockMinimo || 1;
 
     if (
-      alimento.cantidad <= stockMinimo
-    ) {
-
-      criticos++;
-
-    } else if (
-
       alimento.cantidad <=
       stockMinimo * 1.5
-
     ) {
 
-      bajos++;
+      alertas++;
 
     }
 
   });
 
-  let salud =
-    100 -
-    (criticos * 15) -
-    (bajos * 5);
-
-  salud =
-    Math.max(
-      0,
-      Math.min(100, salud)
+  const salud =
+    Math.round(
+      ((total - alertas) / total) * 100
     );
 
   barra.style.width =
@@ -1101,10 +1120,15 @@ function actualizarBarraSalud() {
   barra.textContent =
     salud + "%";
 
-  if (salud >= 80) {
+  if (salud >= 90) {
 
     barra.style.background =
       "#22C55E";
+
+  } else if (salud >= 70) {
+
+    barra.style.background =
+      "#84CC16";
 
   } else if (salud >= 50) {
 
@@ -1119,7 +1143,6 @@ function actualizarBarraSalud() {
   }
 
 }
-
 function generarRecetas() {
 
   const contenedor =
