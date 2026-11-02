@@ -1450,39 +1450,34 @@ function generarRecetaDelDia() {
 
   contenedor.innerHTML = `
 
-    <div
-      style="
-        background:#f0fdf4;
-        padding:15px;
-        border-radius:10px;
-      "
-    >
+  <div
+    style="
+      background:#f0fdf4;
+      padding:15px;
+      border-radius:10px;
+    "
+  >
 
-      <strong>
-        🍳 ${receta.nombre}
-      </strong>
+    <strong>
+      🍳 ${receta.nombre}
+    </strong>
 
-      <br><br>
+    <br><br>
 
-      Motivo:
+    Ingredientes a utilizar:
 
-      <br>
+    <br><br>
 
-      ✅ Utiliza
-      ${productoPrioritario.nombre}
+    ${ingredientesDisponibles
+      .map(
+        ingrediente =>
+          `✅ ${ingrediente}`
+      )
+      .join("<br>")}
 
-      <br>
+  </div>
 
-      ✅ Caduca en
-      ${productoPrioritario.dias} días
-
-      <br>
-
-      ✅ Ayuda a reducir desperdicio
-
-    </div>
-
-  `;
+`;
 
 }
 
