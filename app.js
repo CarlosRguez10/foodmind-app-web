@@ -274,9 +274,37 @@ function mostrarAlimentos() {
       Cantidad:
       ${alimento.cantidad}
       ${alimento.unidad || "uds"}
-      ${alimento.cantidad <= 1
-        ? '<span class="stock-bajo"> ⚠️ Stock bajo</span>'
-        : ''}
+      ${(() => {
+
+  const producto =
+    obtenerCatalogoCompleto()[alimento.nombre];
+
+  const stockMinimo =
+    producto?.stockMinimo || 1;
+
+  if (alimento.cantidad <= stockMinimo) {
+
+    return `
+      <span class="stock-critico">
+        🚨 Stock crítico
+      </span>
+    `;
+
+  }
+
+  if (alimento.cantidad <= stockMinimo * 1.5) {
+
+    return `
+      <span class="stock-bajo">
+        ⚠️ Stock bajo
+      </span>
+    `;
+
+  }
+
+  return "";
+
+})()}
       </p>
 
       <p>
@@ -756,19 +784,28 @@ function actualizarDashboard() {
 
   let proximos = 0;
   let caducados = 0;
+  let alertasStock = 0;
 
   alimentos.forEach(alimento => {
 
-    const dias =
-      diasHastaCaducidad(
-        alimento.caducidad
-      );
+    const dias = diasHastaCaducidad(
+      alimento.caducidad
+    );
 
-    if (dias < 0)
-      caducados++;
+    if (dias < 0) caducados++;
 
     if (dias >= 0 && dias <= 7)
       proximos++;
+
+    const producto =
+      obtenerCatalogoCompleto()[alimento.nombre];
+
+    const stockMinimo =
+      producto?.stockMinimo || 1;
+
+    if (alimento.cantidad <= stockMinimo) {
+      alertasStock++;
+    }
 
   });
 
@@ -791,6 +828,9 @@ function actualizarDashboard() {
   const compraElement =
     document.getElementById("compraPendiente");
 
+  const alertasElement =
+    document.getElementById("alertasStock");
+
   if (totalElement)
     totalElement.textContent = total;
 
@@ -803,8 +843,10 @@ function actualizarDashboard() {
   if (compraElement)
     compraElement.textContent = pendientes;
 
-}
+  if (alertasElement)
+    alertasElement.textContent = alertasStock;
 
+}
 document.addEventListener(
   "DOMContentLoaded",
   () => {
