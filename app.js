@@ -1437,14 +1437,17 @@ function generarRecetaDelDia() {
 
   const recetasCompatibles =
     recetas.filter(receta =>
+
       receta.ingredientes.some(
         ingrediente =>
+
+          ingrediente
+            .toLowerCase() ===
           productoPrioritario.nombre
             .toLowerCase()
-            .includes(
-              ingrediente.toLowerCase()
-            )
+
       )
+
     );
 
   if (
@@ -1452,18 +1455,21 @@ function generarRecetaDelDia() {
   ) {
 
     contenedor.innerHTML = `
+
       <strong>
         ${productoPrioritario.nombre}
       </strong>
 
-      <br>
+      <br><br>
 
       ⏳ Caduca en
-      ${productoPrioritario.dias} días
+      ${productoPrioritario.dias}
+      días
 
       <br><br>
 
       🍽️ Consumir cuanto antes
+
     `;
 
     return;
@@ -1475,34 +1481,40 @@ function generarRecetaDelDia() {
 
   contenedor.innerHTML = `
 
-  <div
-    style="
+    <div style="
       background:#f0fdf4;
       padding:15px;
       border-radius:10px;
-    "
-  >
+    ">
 
-    <strong>
-      🍳 ${receta.nombre}
-    </strong>
+      <strong>
+        🍳 ${receta.nombre}
+      </strong>
 
-    <br><br>
+      <br><br>
 
-    Ingredientes a utilizar:
+      ⏱️ ${receta.tiempo} min
 
-    <br><br>
+      <br>
 
-    ${ingredientesDisponibles
-      .map(
-        ingrediente =>
-          `✅ ${ingrediente}`
-      )
-      .join("<br>")}
+      ⭐ ${receta.dificultad}
 
-  </div>
+      <br><br>
 
-`;
+      Ingredientes:
+
+      <br><br>
+
+      ${receta.ingredientes
+        .map(
+          ingrediente =>
+            `✅ ${ingrediente}`
+        )
+        .join("<br>")}
+
+    </div>
+
+  `;
 
 }
 
