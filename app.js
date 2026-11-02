@@ -911,6 +911,8 @@ function actualizarDashboard() {
 
     actualizarBarraSalud();
 
+    generarRecetaDelDia();
+  
     generarCocinarPrimero();  
 }
 function generarDashboardPremium() {
@@ -1422,6 +1424,127 @@ function generarCocinarPrimero() {
 
       })
       .join("");
+
+}
+
+function generarRecetaDelDia() {
+
+  const contenedor =
+    document.getElementById(
+      "recetaDelDia"
+    );
+
+  if (!contenedor) return;
+
+  const candidatos =
+    alimentos
+      .map(alimento => {
+
+        const dias =
+          diasHastaCaducidad(
+            alimento.caducidad
+          );
+
+        return {
+          ...alimento,
+          dias
+        };
+
+      })
+      .filter(item =>
+        item.dias >= 0
+      )
+      .sort(
+        (a, b) =>
+          a.dias - b.dias
+      );
+
+  if (candidatos.length === 0) {
+
+    contenedor.innerHTML = `
+      <p>✅ No hay recomendaciones</p>
+    `;
+
+    return;
+
+  }
+
+  const productoPrioritario =
+    candidatos[0];
+
+  const recetasCompatibles =
+    recetas.filter(receta =>
+      receta.ingredientes.some(
+        ingrediente =>
+          productoPrioritario.nombre
+            .toLowerCase()
+            .includes(
+              ingrediente.toLowerCase()
+            )
+      )
+    );
+
+  if (
+    recetasCompatibles.length === 0
+  ) {
+
+    contenedor.innerHTML = `
+      <strong>
+        ${productoPrioritario.nombre}
+      </strong>
+
+      <br>
+
+      ⏳ Caduca en
+      ${productoPrioritario.dias} días
+
+      <br><br>
+
+      🍽️ Consumir cuanto antes
+    `;
+
+    return;
+
+  }
+
+  const receta =
+    recetasCompatibles[0];
+
+  contenedor.innerHTML = `
+
+    <div
+      style="
+        background:#f0fdf4;
+        padding:15px;
+        border-radius:10px;
+      "
+    >
+
+      <strong>
+        🍳 ${receta.nombre}
+      </strong>
+
+      <br><br>
+
+      Motivo:
+
+      <br>
+
+      ✅ Utiliza
+      ${productoPrioritario.nombre}
+
+      <br>
+
+      ✅ Caduca en
+      ${productoPrioritario.dias} días
+
+      <br>
+
+      ✅ Ayuda a reducir desperdicio
+
+    </div>
+
+  `;
 
 }
 
