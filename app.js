@@ -1408,25 +1408,43 @@ function generarRecetaDelDia() {
             alimento.caducidad
           );
 
+        const producto =
+          obtenerCatalogoCompleto()[
+            alimento.nombre
+          ];
+
+        const stockMinimo =
+          producto?.stockMinimo || 1;
+
         return {
           ...alimento,
-          dias
+          dias,
+          esCritico:
+            alimento.cantidad <= stockMinimo
         };
 
       })
-      .filter(item =>
-        item.dias >= 0
-      )
-      .sort(
-        (a, b) =>
-          a.dias - b.dias
-      );
+      .filter(item => item.dias >= 0)
+      .sort((a, b) => {
+
+        if (
+          a.esCritico &&
+          !b.esCritico
+        ) return -1;
+
+        if (
+          !a.esCritico &&
+          b.esCritico
+        ) return 1;
+
+        return a.dias - b.dias;
+
+      });
 
   if (candidatos.length === 0) {
 
-    contenedor.innerHTML = `
-      <p>✅ No hay recomendaciones</p>
-    `;
+    contenedor.innerHTML =
+      "<p>✅ No hay recomendaciones</p>";
 
     return;
 
@@ -1436,19 +1454,25 @@ function generarRecetaDelDia() {
     candidatos[0];
 
   const recetasCompatibles =
-    recetas.filter(receta =>
+    recetas
+      .filter(receta =>
 
-      receta.ingredientes.some(
-        ingrediente =>
+        receta.ingredientes.some(
+          ingrediente =>
 
-          ingrediente
-            .toLowerCase() ===
-          productoPrioritario.nombre
-            .toLowerCase()
+            ingrediente
+              .toLowerCase() ===
+            productoPrioritario.nombre
+              .toLowerCase()
+
+        )
 
       )
-
-    );
+      .sort(
+        (a, b) =>
+          b.ingredientes.length -
+          a.ingredientes.length
+      );
 
   if (
     recetasCompatibles.length === 0
@@ -1459,12 +1483,6 @@ function generarRecetaDelDia() {
       <strong>
         ${productoPrioritario.nombre}
       </strong>
-
-      <br><br>
-
-      ⏳ Caduca en
-      ${productoPrioritario.dias}
-      días
 
       <br><br>
 
@@ -1517,188 +1535,6 @@ function generarRecetaDelDia() {
   `;
 
 }
-
-function generarMenuSemanal() {
-
-  const contenedor =
-    document.getElementById(
-      "menuSemanal"
-    );
-
-  if (!contenedor) return;
-
-  const alimentosOrdenados =
-    [...alimentos]
-      .map(alimento => {
-
-        const dias =
-          diasHastaCaducidad(
-            alimento.caducidad
-          );
-
-        const producto =
-          obtenerCatalogoCompleto()[
-            alimento.nombre
-          ];
-
-        const stockMinimo =
-          producto?.stockMinimo || 1;
-
-        return {
-          ...alimento,
-          dias,
-          esCritico:
-            alimento.cantidad <= stockMinimo
-        };
-
-      })
-      .filter(item => item.dias >= 0)
-      .sort((a, b) => {
-
-        if (
-          a.esCritico &&
-          !b.esCritico
-        ) return -1;
-
-        if (
-          !a.esCritico &&
-          b.esCritico
-        ) return 1;
-
-        return a.dias - b.dias;
-
-      });
-
-  const recetasSeleccionadas = [];
-
-  alimentosOrdenados.forEach(
-    alimento => {
-
-      const compatibles =
-        recetas.filter(receta =>
-
-          receta.ingredientes.some(
-            ingrediente =>
-
-              alimento.nombre
-                .toLowerCase()
-                .includes(
-                  ingrediente.toLowerCase()
-                )
-
-          )
-
-        );
-
-      compatibles.forEach(receta => {
-
-        const yaExiste =
-          recetasSeleccionadas.some(
-            item =>
-              item.nombre ===
-              receta.nombre
-          );
-
-        if (!yaExiste) {
-
-          recetasSeleccionadas.push(
-            receta
-          );
-
-        }
-
-      });
-
-    }
-  );
-
-  if (
-    recetasSeleccionadas.length === 0
-  ) {
-
-    contenedor.innerHTML = `
-      <p>
-        😔 No hay recetas disponibles
-      </p>
-    `;
-
-    return;
-
-  }
-
-  const diasSemana = [
-    "Lunes",
-    "Martes",
-    "Miércoles",
-    "Jueves",
-    "Viernes",
-    "Sábado",
-    "Domingo"
-  ];
-
-  let html = "";
-
-  diasSemana.forEach(
-    (dia, indice) => {
-
-      const receta =
-        recetasSeleccionadas[indice];
-
-      if (!receta) {
-
-        html += `
-
-          <div style="
-            margin-bottom:12px;
-            padding:12px;
-            background:#f9fafb;
-            border-radius:10px;
-          ">
-
-            <strong>
-              ${dia}
-            </strong>
-
-            <br>
-
-            🍽️ Libre
-
-          </div>
-
-        `;
-
-        return;
-
-      }
-
-      html += `
-
-        <div style="
-          margin-bottom:12px;
-          padding:12px;
-          background:#f9fafb;
-          border-radius:10px;
-        ">
-
-          <strong>
-            ${dia}
-          </strong>
-
-          <br>
-
-          🍳 ${receta.nombre}
-
-        </div>
-
-      `;
-
-    }
-  );
-
-  contenedor.innerHTML = html;
-
-}
-
 document.addEventListener(
   "DOMContentLoaded",
   () => {
