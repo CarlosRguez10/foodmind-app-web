@@ -1492,30 +1492,90 @@ function generarMenuSemanal() {
 
   if (!contenedor) return;
 
-  const ingredientesDisponibles =
-    alimentos.map(alimento =>
-      alimento.nombre.toLowerCase()
-    );
+  const alimentosOrdenados =
+    [...alimentos]
+      .map(alimento => {
 
-  const recetasDisponibles =
-    recetas.filter(receta =>
+        const dias =
+          diasHastaCaducidad(
+            alimento.caducidad
+          );
 
-      receta.ingredientes.every(
-        ingrediente =>
+        const producto =
+          obtenerCatalogoCompleto()[
+            alimento.nombre
+          ];
 
-          ingredientesDisponibles.some(
-            alimento =>
-              alimento.includes(
-                ingrediente.toLowerCase()
-              )
+        const stockMinimo =
+          producto?.stockMinimo || 1;
+
+        const esCritico =
+          alimento.cantidad <= stockMinimo;
+
+        return {
+          ...alimento,
+          dias,
+          esCritico
+        };
+
+      })
+      .filter(item => item.dias >= 0)
+      .sort((a, b) => {
+
+        if (
+          a.esCritico &&
+          !b.esCritico
+        ) {
+          return -1;
+        }
+
+        if (
+          !a.esCritico &&
+          b.esCritico
+        ) {
+          return 1;
+        }
+
+        return a.dias - b.dias;
+
+      });
+
+  const recetasElegidas = [];
+
+  alimentosOrdenados.forEach(
+    alimento => {
+
+      const receta =
+        recetas.find(receta =>
+
+          receta.ingredientes.some(
+            ingrediente =>
+
+              alimento.nombre
+                .toLowerCase()
+                .includes(
+                  ingrediente.toLowerCase()
+                )
+
+          ) &&
+
+          !recetasElegidas.some(
+            usada =>
+              usada.nombre ===
+              receta.nombre
           )
 
-      )
+        );
 
-    );
+      if (receta) {
+        recetasElegidas.push(receta);
+      }
+
+    }
+  );
 
   if (
-    recetasDisponibles.length === 0
+    recetasElegidas.length === 0
   ) {
 
     contenedor.innerHTML = `
@@ -1533,41 +1593,47 @@ function generarMenuSemanal() {
     "Martes",
     "Miércoles",
     "Jueves",
-    "Viernes"
+    "Viernes",
+    "Sábado",
+    "Domingo"
   ];
 
   let html = "";
 
-  diasSemana.forEach((dia, indice) => {
+  diasSemana.forEach(
+    (dia, indice) => {
 
-    const receta =
-      recetasDisponibles[
-        indice %
-        recetasDisponibles.length
-      ];
+      const receta =
+        recetasElegidas[
+          indice %
+          recetasElegidas.length
+        ];
 
-    html += `
+      html += `
 
-      <div style="
-        margin-bottom:12px;
-        padding:10px;
-        background:#f9fafb;
-        border-radius:8px;
-      ">
+        <div
+          style="
+            margin-bottom:12px;
+            padding:12px;
+            background:#f9fafb;
+            border-radius:10px;
+          "
+        >
 
-        <strong>
-          ${dia}
-        </strong>
+          <strong>
+            ${dia}
+          </strong>
 
-        <br>
+          <br>
 
-        🍳 ${receta.nombre}
+          🍳 ${receta.nombre}
 
-      </div>
+        </div>
 
-    `;
+      `;
 
-  });
+    }
+  );
 
   contenedor.innerHTML = html;
 
