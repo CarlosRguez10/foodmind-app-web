@@ -850,6 +850,8 @@ function actualizarDashboard() {
 
     generarDashboardPremium();
   
+    actualizarEstadoDespensa();
+  
 }
 function generarDashboardPremium() {
 
@@ -945,6 +947,99 @@ function generarDashboardPremium() {
 
         })
         .join("");
+
+  }
+
+}
+
+function actualizarEstadoDespensa() {
+
+  const estado =
+    document.getElementById(
+      "estadoDespensa"
+    );
+
+  if (!estado) return;
+
+  let criticos = 0;
+  let bajos = 0;
+
+  alimentos.forEach(alimento => {
+
+    const producto =
+      obtenerCatalogoCompleto()[alimento.nombre];
+
+    const stockMinimo =
+      producto?.stockMinimo || 1;
+
+    if (
+      alimento.cantidad <= stockMinimo
+    ) {
+
+      criticos++;
+
+    } else if (
+
+      alimento.cantidad <=
+      stockMinimo * 1.5
+
+    ) {
+
+      bajos++;
+
+    }
+
+  });
+
+  if (criticos >= 5) {
+
+    estado.innerHTML = `
+      <div style="
+        color:white;
+        background:#EF4444;
+        padding:12px;
+        border-radius:8px;
+        text-align:center;
+        font-weight:bold;
+      ">
+        🔴 Compra necesaria
+      </div>
+    `;
+
+  } else if (
+
+    criticos > 0 ||
+    bajos > 3
+
+  ) {
+
+    estado.innerHTML = `
+      <div style="
+        color:#92400E;
+        background:#FDE68A;
+        padding:12px;
+        border-radius:8px;
+        text-align:center;
+        font-weight:bold;
+      ">
+        🟡 Revisar stock
+      </div>
+    `;
+
+  } else {
+
+    estado.innerHTML = `
+      <div style="
+        color:white;
+        background:#22C55E;
+        padding:12px;
+        border-radius:8px;
+        text-align:center;
+        font-weight:bold;
+      ">
+        🟢 Excelente
+      </div>
+    `;
 
   }
 
