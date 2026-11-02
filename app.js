@@ -910,6 +910,8 @@ function actualizarDashboard() {
     actualizarEstadoDespensa();
 
     actualizarBarraSalud();
+
+    generarRecetas();
   
 }
 function generarDashboardPremium() {
@@ -1174,6 +1176,61 @@ function actualizarBarraSalud() {
       "#EF4444";
 
   }
+
+}
+
+function generarRecetas() {
+
+  const contenedor =
+    document.getElementById(
+      "recetasSugeridas"
+    );
+
+  if (!contenedor) return;
+
+  const ingredientes =
+    alimentos.map(alimento =>
+      alimento.nombre.toLowerCase()
+    );
+
+  const disponibles =
+    recetas.filter(receta => {
+
+      return receta.ingredientes.every(
+        ingrediente => {
+
+          return ingredientes.some(
+            alimento =>
+              alimento.includes(
+                ingrediente.toLowerCase()
+              )
+          );
+
+        }
+      );
+
+    });
+
+  if (disponibles.length === 0) {
+
+    contenedor.innerHTML = `
+      <p>
+        😔 No hay recetas disponibles
+      </p>
+    `;
+
+    return;
+  }
+
+  contenedor.innerHTML =
+    disponibles
+      .slice(0, 5)
+      .map(receta => `
+        <p>
+          🍳 ${receta.nombre}
+        </p>
+      `)
+      .join("");
 
 }
 
