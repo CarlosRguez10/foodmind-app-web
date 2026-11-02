@@ -1016,12 +1016,12 @@ function generarDashboardPremium() {
 
 function actualizarEstadoDespensa() {
 
-  const estado =
+  const mensaje =
     document.getElementById(
-      "estadoDespensa"
+      "mensajeSalud"
     );
 
-  if (!estado) return;
+  if (!mensaje) return;
 
   let criticos = 0;
   let bajos = 0;
@@ -1055,18 +1055,11 @@ function actualizarEstadoDespensa() {
 
   if (criticos >= 5) {
 
-    estado.innerHTML = `
-      <div style="
-        color:white;
-        background:#EF4444;
-        padding:12px;
-        border-radius:8px;
-        text-align:center;
-        font-weight:bold;
-      ">
-        🔴 Compra necesaria
-      </div>
-    `;
+    mensaje.innerHTML =
+      "🔴 Compra necesaria";
+
+    mensaje.style.color =
+      "#EF4444";
 
   } else if (
 
@@ -1075,33 +1068,19 @@ function actualizarEstadoDespensa() {
 
   ) {
 
-    estado.innerHTML = `
-      <div style="
-        color:#92400E;
-        background:#FDE68A;
-        padding:12px;
-        border-radius:8px;
-        text-align:center;
-        font-weight:bold;
-      ">
-        🟡 Revisar stock
-      </div>
-    `;
+    mensaje.innerHTML =
+      "🟡 Revisar stock";
+
+    mensaje.style.color =
+      "#D97706";
 
   } else {
 
-    estado.innerHTML = `
-      <div style="
-        color:white;
-        background:#22C55E;
-        padding:12px;
-        border-radius:8px;
-        text-align:center;
-        font-weight:bold;
-      ">
-        🟢 Excelente
-      </div>
-    `;
+    mensaje.innerHTML =
+      "🟢 Excelente";
+
+    mensaje.style.color =
+      "#22C55E";
 
   }
 
